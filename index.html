@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>October Surprise</title>
+<meta name="description" content="A 32-seed bracket of the 21st century's great American political gaffes, scandals and October surprises. Pick your champion and send your bracket to someone.">
+<meta property="og:title" content="October Surprise">
+<meta property="og:description" content="32 gaffes, scandals and October surprises. One champion. Fill out your bracket.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://october.stuckhe.re/">
+<meta name="theme-color" content="#c25b3f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%83%3C/text%3E%3C/svg%3E">
+<style>
+@font-face { font-family: 'Lora'; font-weight: 400 500; font-display: swap; src: url('fonts/lora.woff2') format('woff2'); }
+@font-face { font-family: 'Martian Mono'; font-weight: 300 400; font-display: swap; src: url('fonts/martianmono.woff2') format('woff2'); }
+
+:root {
+  --bg: #f7f4ef;
+  --surface: #fffdf9;
+  --text: #1a1a1a;
+  --muted: #8a8480;
+  --rule: #ddd9d3;
+  --accent: #c25b3f;
+  --accent-soft: #f3dfd6;
+  --win: #1a1a1a;
+  --win-text: #f7f4ef;
+  --loser: #b3ada7;
+  --mono: 'Martian Mono', ui-monospace, monospace;
+  --serif: 'Lora', Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171513;
+    --surface: #211e1b;
+    --text: #ece7e0;
+    --muted: #8f8880;
+    --rule: #38332e;
+    --accent: #e07a58;
+    --accent-soft: #3a261e;
+    --win: #ece7e0;
+    --win-text: #171513;
+    --loser: #5c5650;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+header.top {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 16px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+h1 {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: clamp(22px, 4vw, 34px);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+h1 span { color: var(--accent); }
+.dek { margin: 4px 0 0; color: var(--muted); font-style: italic; max-width: 52ch; }
+
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 9px 14px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--text); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.08); border-color: var(--accent); }
+
+.banner {
+  max-width: 1400px;
+  margin: 8px auto 0;
+  padding: 0 16px;
+}
+.banner-inner {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.banner-inner p { margin: 0; }
+.banner-inner strong { font-weight: 500; }
+.banner[hidden] { display: none; }
+
+.progress {
+  max-width: 1400px;
+  margin: 10px auto 0;
+  padding: 0 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ---------- desktop bracket ---------- */
+.bracket-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 16px 32px;
+  overflow-x: auto;
+}
+.bracket {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(128px, 1fr)) minmax(132px, 1fr) minmax(150px, 1.1fr) minmax(132px, 1fr) repeat(3, minmax(128px, 1fr));
+  gap: 0 10px;
+  min-width: 1220px;
+}
+.col { display: flex; flex-direction: column; }
+.col-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 6px;
+}
+.region { flex: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 4px 0; }
+.rlabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  white-space: nowrap;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  height: 18px;
+  margin: 6px 0 2px;
+}
+.col:not(.first) .rlabel { visibility: hidden; }
+.col.right .rlabel { text-align: right; }
+.center { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+
+.match {
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  border-radius: 8px;
+  margin: 5px 0;
+  overflow: hidden;
+}
+.team {
+  display: flex;
+  align-items: stretch;
+  min-height: 34px;
+}
+.team + .team { border-top: 1px solid var(--rule); }
+.pick {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 5px 4px 5px 8px;
+  cursor: pointer;
+  font-size: 12.5px;
+  line-height: 1.2;
+}
+.pick:disabled { cursor: default; }
+.pick .seed { font-family: var(--mono); font-size: 10px; color: var(--muted); width: 12px; flex: none; text-align: right; }
+.pick .name { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.team.empty .pick { color: var(--muted); font-style: italic; cursor: default; }
+.team.won { background: var(--win); }
+.team.won .pick, .team.won .info { color: var(--win-text); }
+.team.won .seed { color: var(--win-text); opacity: 0.6; }
+.team.lost .name { color: var(--loser); text-decoration: line-through; text-decoration-thickness: 1px; }
+body:not(.readonly) .team:not(.empty):not(.won) .pick:hover { background: var(--accent-soft); }
+.info {
+  flex: none;
+  width: 30px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.info:hover { color: var(--accent); }
+.team.empty .info { visibility: hidden; }
+
+.match.final { border: 2px solid var(--accent); }
+.champ {
+  text-align: center;
+  padding: 10px 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  min-height: 64px;
+}
+.champ strong {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--accent);
+  margin-top: 4px;
+  line-height: 1.25;
+}
+
+/* ---------- mobile rounds ---------- */
+.tabs { display: none; }
+.rounds { display: none; }
+@media (max-width: 760px) {
+  .bracket-wrap { display: none; }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px 4px;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 2;
+    border-bottom: 1px solid var(--rule);
+  }
+  .tab {
+    flex: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    cursor: pointer;
+  }
+  .tab[aria-selected="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .tab .count { opacity: 0.6; margin-left: 4px; }
+  .rounds { display: block; padding: 4px 16px 32px; }
+  .rounds .rlabel { visibility: visible; margin-top: 18px; }
+  .rounds .pick { font-size: 15px; padding: 10px 6px 10px 10px; }
+  .rounds .pick .name { -webkit-line-clamp: unset; }
+  .rounds .team { min-height: 46px; }
+  .rounds .info { width: 44px; font-size: 13px; }
+  .next-round { margin-top: 16px; width: 100%; }
+}
+
+footer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+}
+footer a { color: inherit; }
+
+/* ---------- dialogs ---------- */
+dialog {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 22px 22px 18px;
+  width: min(460px, calc(100vw - 32px));
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+dialog::backdrop { background: rgba(20, 15, 10, 0.45); }
+dialog h2 { font-weight: 500; font-size: 21px; margin: 0 0 4px; line-height: 1.25; }
+dialog .meta { font-family: var(--mono); font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px; }
+dialog p { margin: 0 0 14px; }
+dialog .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; margin-top: 8px; }
+dialog label { font-family: var(--mono); font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+dialog input[type="text"] {
+  width: 100%;
+  font: inherit;
+  font-size: 15px;
+  padding: 9px 11px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
+.status { font-family: var(--mono); font-size: 11px; color: var(--accent); min-height: 16px; margin: 6px 0 0; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>October <span>Surprise</span></h1>
+    <p class="dek">Thirty-two gaffes, scandals and late-breaking disasters from American politics since 2000. Pick a winner in each matchup.</p>
+  </div>
+  <div class="actions" id="editActions">
+    <button class="btn" id="resetBtn" type="button">Reset</button>
+    <button class="btn primary" id="shareBtn" type="button" disabled>Save &amp; share</button>
+  </div>
+</header>
+
+<div class="banner" id="viewBanner" hidden>
+  <div class="banner-inner">
+    <p id="viewText"></p>
+    <div class="actions">
+      <button class="btn" id="adoptBtn" type="button">Start from these picks</button>
+      <button class="btn primary" id="ownBtn" type="button">Make your own</button>
+    </div>
+  </div>
+</div>
+
+<div class="progress" id="progress"></div>
+
+<div class="bracket-wrap"><div class="bracket" id="bracket"></div></div>
+<nav class="tabs" id="tabs" role="tablist" aria-label="Rounds"></nav>
+<div class="rounds" id="rounds"></div>
+
+<footer>
+  Ties go to whoever got more cable airtime. A <a href="https://stuckhe.re">stuckhe.re</a> production.
+</footer>
+
+<dialog id="infoDialog">
+  <p class="meta" id="infoMeta"></p>
+  <h2 id="infoTitle"></h2>
+  <p id="infoBlurb"></p>
+  <div class="row"><button class="btn" type="button" data-close>Close</button></div>
+</dialog>
+
+<dialog id="shareDialog">
+  <h2>Send your bracket</h2>
+  <p>The link holds your picks, so whoever opens it sees exactly your bracket.</p>
+  <label for="nameInput">Your name (optional)</label>
+  <input type="text" id="nameInput" maxlength="24" placeholder="e.g. Mike" autocomplete="nickname">
+  <div id="linkRow" hidden style="margin-top:12px">
+    <label for="linkOut">Your link</label>
+    <input type="text" id="linkOut" readonly>
+  </div>
+  <p class="status" id="shareStatus" role="status"></p>
+  <div class="row">
+    <button class="btn" type="button" data-close>Done</button>
+    <button class="btn" type="button" id="nativeShareBtn" hidden>Share…</button>
+    <button class="btn primary" type="button" id="copyBtn">Copy link</button>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- data ----------
+  // Seed order within each region is 1..8. Regions 0/1 meet in one semifinal, 2/3 in the other.
+  var REGIONS = ["Gaffes", "Scandals", "October Surprises", "Implosions"];
+  var FIELD = [
+    // Gaffes
+    { t: "The Dean Scream", w: "Howard Dean", y: "2004", b: "Iowa caucus night: a ballroom, a hoarse governor, and a mic that picked up exactly one voice. He was the frontrunner going in and a punchline by breakfast." },
+    { t: "“47 percent”", w: "Mitt Romney", y: "2012", b: "Told Boca Raton donors that 47% of Americans would vote for the president “no matter what” and see themselves as victims. The bartender was recording, and Mother Jones had it by September." },
+    { t: "“Basket of deplorables”", w: "Hillary Clinton", y: "2016", b: "Put “half” of Trump’s supporters in it at a New York fundraiser. They had it on T-shirts within the week." },
+    { t: "“Mission Accomplished”", w: "George W. Bush", y: "2003", b: "A flight suit, an aircraft carrier, and a banner. The Iraq War went on for more than eight years after that." },
+    { t: "“All of ’em, any of ’em”", w: "Sarah Palin", y: "2008", b: "Katie Couric asked which newspapers she read. Tina Fey barely had to change the words." },
+    { t: "“Binders full of women”", w: "Mitt Romney", y: "2012", b: "Second debate, a point about hiring women in Massachusetts. The Tumblr went up before the debate was over." },
+    { t: "“Voted for it before I voted against it”", w: "John Kerry", y: "2004", b: "About the $87 billion for Iraq. Ten words that wrote the Bush campaign’s flip-flop ads for it." },
+    { t: "“Cling to guns or religion”", w: "Barack Obama", y: "2008", b: "Told a closed-door San Francisco fundraiser that “bitter” small-town voters cling to guns or religion. It did not stay closed-door." },
+    // Scandals
+    { t: "The Weiner tweet", w: "Anthony Weiner", y: "2011", b: "Tweeted a photo he meant to DM, then claimed he’d been hacked. He resigned, came back as “Carlos Danger” in 2013, and his laptop has a cameo elsewhere in this bracket." },
+    { t: "“Hiking the Appalachian Trail”", w: "Mark Sanford", y: "2009", b: "South Carolina’s governor vanished for six days while staff said he was hiking. He was in Buenos Aires. Four years later he was back in Congress." },
+    { t: "Everything about George Santos", w: "George Santos", y: "2022", b: "Baruch, Goldman, Citigroup, star volleyball player: almost none of it was true. He became only the sixth member ever expelled from the House." },
+    { t: "Client 9", w: "Eliot Spitzer", y: "2008", b: "The governor who made his name busting prostitution rings turned out to be a client of one. He resigned within the week." },
+    { t: "“A wide stance”", w: "Larry Craig", y: "2007", b: "Arrested in a Minneapolis airport bathroom stall, pleaded guilty, then explained he just had a wide stance." },
+    { t: "The gold bars", w: "Bob Menendez", y: "2024", b: "The FBI found gold bars and about $480,000 in cash, some of it stuffed into his own jackets. He was convicted on all 16 counts." },
+    { t: "The Rielle Hunter affair", w: "John Edwards", y: "2008", b: "Denied an affair with his campaign videographer while his wife was fighting cancer, then denied the baby. Eventually he admitted both." },
+    { t: "Bridgegate", w: "Chris Christie", y: "2013", b: "“Time for some traffic problems in Fort Lee.” Lanes onto the George Washington Bridge closed for four days, apparently to punish a mayor." },
+    // October Surprises
+    { t: "The Access Hollywood tape", w: "Donald Trump", y: "Oct 2016", b: "Came out on a Friday afternoon, and every pundit called it the end of the campaign. He won a month later." },
+    { t: "The Comey letter", w: "James Comey", y: "Oct 2016", b: "Eleven days out, the FBI director told Congress there were new Clinton emails. They turned up on Anthony Weiner’s laptop, and nothing came of them except possibly the election." },
+    { t: "Hunter Biden’s laptop", w: "Hunter Biden", y: "Oct 2020", b: "Left at a Delaware repair shop, then landed in the New York Post. Twitter’s decision to block the link became its own scandal about the first one." },
+    { t: "The bin Laden tape", w: "Osama bin Laden", y: "Oct 2004", b: "A new video from the man himself, four days before the election. Suddenly the race was about 9/11 again." },
+    { t: "The Foley messages", w: "Mark Foley", y: "Oct 2006", b: "The co-chair of the House caucus on missing and exploited children resigned over explicit messages to teenage House pages. Republicans lost the House five weeks later." },
+    { t: "“Floating island of garbage”", w: "MSG rally", y: "Oct 2024", b: "A warm-up comic’s line about Puerto Rico. Biden answered with a “garbage” line of his own, then Trump showed up in a garbage truck. Nobody won this one except the truck." },
+    { t: "The DUI", w: "George W. Bush", y: "Nov 2000", b: "Five days out, a 1976 drunk-driving arrest in Maine surfaced. Strictly speaking it was a November surprise, and the committee allowed it." },
+    { t: "Sandy and the “hug”", w: "Chris Christie", y: "Oct 2012", b: "A week before the election, Christie toured the storm damage with Obama and had nice things to say about him. It was a handshake, but some Republicans still haven’t forgiven the hug." },
+    // Implosions
+    { t: "The debate", w: "Joe Biden", y: "2024", b: "Ninety minutes in Atlanta, including “We finally beat Medicare.” He was out of the race 24 days later." },
+    { t: "“Oops”", w: "Rick Perry", y: "2011", b: "Promised to eliminate three federal agencies and could only name two. The third was Energy, which he later ran as Secretary of Energy." },
+    { t: "“Legitimate rape”", w: "Todd Akin", y: "2012", b: "Said the female body can “shut that whole thing down.” That turned a safe Missouri Senate pickup into a 15-point loss." },
+    { t: "9-9-9, then nothing", w: "Herman Cain", y: "2011", b: "He was leading national polls in October. By December the campaign was over, after harassment allegations and a very long pause on Libya." },
+    { t: "“Please clap”", w: "Jeb Bush", y: "2016", b: "A $100 million super PAC, the most famous last name in Republican politics, and a New Hampshire crowd that had to be asked." },
+    { t: "The Iowa caucus app", w: "Iowa Democrats", y: "2020", b: "A new app was supposed to report the results. Days passed before there were results, and Iowa eventually lost its first-in-the-nation slot." },
+    { t: "The Twitter Spaces launch", w: "Ron DeSantis", y: "2023", b: "Announced his campaign on a Twitter audio stream with Elon Musk, which fell over for about 20 minutes. It went roughly like that from there." },
+    { t: "“Another Yankee fan”", w: "Martha Coakley", y: "2010", b: "The heavy favorite for Ted Kennedy’s Senate seat called Curt Schilling a Yankees fan, then lost the seat to Scott Brown. In Massachusetts." }
+  ];
+
+  var ROUND_NAMES = ["Round of 32", "Sweet 16", "Elite 8", "Final Four", "Championship"];
+  var ROUND_SHORT = ["R32", "S16", "E8", "F4", "Final"];
+  var ROUND_SIZE = [16, 8, 4, 2, 1];
+  var OFFSET = [0, 16, 24, 28, 30];
+  var N = 31;
+  var PAIRS = [[0, 7], [3, 4], [2, 5], [1, 6]]; // seed-index pairings: 1v8, 4v5, 3v6, 2v7
+  var STORE_KEY = "october.picks.v1";
+  var NAME_KEY = "october.name";
+  var SITE = "https://october.stuckhe.re/";
+
+  // ---------- state ----------
+  var own = blank();          // the visitor's editable bracket
+  var shared = null;          // { picks, name } when viewing someone else's link
+  var mobileRound = 0;
+
+  function blank() { var a = []; for (var i = 0; i < N; i++) a.push("-"); return a; }
+
+  function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode etc. */ } }
+  function safeDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  function validPicks(s) { return typeof s === "string" && s.length === N && /^[01-]+$/.test(s); }
+
+  // Rejects strings whose picks don't chain (a later pick with an unpicked feeder).
+  function consistent(arr) {
+    for (var k = 1; k < 5; k++) {
+      for (var i = 0; i < ROUND_SIZE[k]; i++) {
+        var m = OFFSET[k] + i;
+        if (arr[m] === "-") continue;
+        var feeder = OFFSET[k - 1] + 2 * i + Number(arr[m]);
+        if (arr[feeder] === "-") return false;
+      }
+    }
+    return true;
+  }
+
+  function loadOwn() {
+    var s = safeGet(STORE_KEY);
+    if (s && validPicks(s) && consistent(s.split(""))) own = s.split("");
+    else if (s) { console.warn("october: ignoring corrupt saved picks"); safeDel(STORE_KEY); }
+  }
+  function saveOwn() { safeSet(STORE_KEY, own.join("")); }
+
+  function parseHash() {
+    var h = location.hash.replace(/^#/, "");
+    if (!h) return null;
+    var params = new URLSearchParams(h);
+    var b = params.get("b");
+    if (!b) return null;
+    if (!validPicks(b) || !consistent(b.split(""))) {
+      console.warn("october: ignoring malformed shared bracket in URL");
+      return null;
+    }
+    var name = (params.get("n") || "").replace(/[\u0000-\u001f]/g, "").trim().slice(0, 24);
+    return { picks: b.split(""), name: name };
+  }
+
+  // ---------- bracket logic ----------
+  function teamsFor(picks, k, i) {
+    if (k === 0) {
+      var region = Math.floor(i / 4), p = PAIRS[i % 4];
+      return [region * 8 + p[0], region * 8 + p[1]];
+    }
+    return [winnerOf(picks, k - 1, 2 * i), winnerOf(picks, k - 1, 2 * i + 1)];
+  }
+  function winnerOf(picks, k, i) {
+    var v = picks[OFFSET[k] + i];
+    if (v === "-") return null;
+    return teamsFor(picks, k, i)[Number(v)];
+  }
+
+  // Set a pick; if the previous winner had been carried forward, clear those later picks.
+  function setPick(k, i, slot) {
+    var m = OFFSET[k] + i, v = String(slot);
+    if (own[m] === v) return;
+    var hadPick = own[m] !== "-";
+    own[m] = v;
+    if (hadPick) {
+      while (k < 4) {
+        var parent = OFFSET[k + 1] + Math.floor(i / 2), fromSlot = String(i % 2);
+        if (own[parent] !== fromSlot) break;
+        own[parent] = "-";
+        i = Math.floor(i / 2); k++;
+      }
+    }
+    saveOwn();
+    render();
+  }
+
+  function activePicks() { return shared ? shared.picks : own; }
+  function champion(picks) { return winnerOf(picks, 4, 0); }
+  function pickedCount(picks) { return picks.filter(function (c) { return c !== "-"; }).length; }
+
+  // ---------- rendering ----------
+  var bracketEl = document.getElementById("bracket");
+  var roundsEl = document.getElementById("rounds");
+  var tabsEl = document.getElementById("tabs");
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function matchEl(picks, k, i) {
+    var m = OFFSET[k] + i, teams = teamsFor(picks, k, i), v = picks[m];
+    var box = el("div", "match" + (k === 4 ? " final" : ""));
+    teams.forEach(function (id, slot) {
+      var row = el("div", "team");
+      if (id == null) row.classList.add("empty");
+      else if (v !== "-") row.classList.add(Number(v) === slot ? "won" : "lost");
+
+      var btn = el("button", "pick");
+      btn.type = "button";
+      if (id == null) {
+        btn.disabled = true;
+        btn.appendChild(el("span", "seed", ""));
+        btn.appendChild(el("span", "name", "TBD"));
+      } else {
+        var f = FIELD[id];
+        btn.appendChild(el("span", "seed", String((id % 8) + 1)));
+        btn.appendChild(el("span", "name", f.t));
+        btn.title = f.t + " (" + f.w + ", " + f.y + ")";
+        if (shared) btn.disabled = true;
+        else btn.addEventListener("click", function () { setPick(k, i, slot); });
+        btn.setAttribute("aria-label", "Pick " + f.t + (v !== "-" && Number(v) === slot ? " (picked)" : ""));
+      }
+      row.appendChild(btn);
+
+      var info = el("button", "info", "i");
+      info.type = "button";
+      info.setAttribute("aria-label", "About this entry");
+      if (id != null) info.addEventListener("click", function () { showInfo(id); });
+      else info.tabIndex = -1;
+      row.appendChild(info);
+
+      box.appendChild(row);
+    });
+    return box;
+  }
+
+  function champEl(picks) {
+    var c = champion(picks), box = el("div", "champ");
+    box.appendChild(document.createTextNode(c == null ? "Champion: TBD" : "Champion"));
+    if (c != null) box.appendChild(el("strong", "", FIELD[c].t));
+    return box;
+  }
+
+  // Columns: L-R32, L-S16, L-E8, L-F4, Final, R-F4, R-E8, R-S16, R-R32
+  function renderDesktop(picks) {
+    bracketEl.textContent = "";
+    var sides = [[0, 1], [2, 3]];
+
+    function regionCols(side, reverse) {
+      var cols = [];
+      for (var k = 0; k < 3; k++) {
+        var col = el("div", "col" + (k === 0 ? " first" : "") + (reverse ? " right" : ""));
+        col.appendChild(el("div", "col-head", ROUND_SHORT[k]));
+        sides[side].forEach(function (r) {
+          var reg = el("div", "region");
+          reg.appendChild(el("div", "rlabel", REGIONS[r]));
+          var per = ROUND_SIZE[k] / 4;
+          for (var j = 0; j < per; j++) reg.appendChild(matchEl(picks, k, r * per + j));
+          col.appendChild(reg);
+        });
+        cols.push(col);
+      }
+      return reverse ? cols.reverse() : cols;
+    }
+
+    function centerCol(head, nodes) {
+      var col = el("div", "col");
+      col.appendChild(el("div", "col-head", head));
+      var c = el("div", "center");
+      nodes.forEach(function (n) { c.appendChild(n); });
+      col.appendChild(c);
+      return col;
+    }
+
+    regionCols(0, false).forEach(function (c) { bracketEl.appendChild(c); });
+    bracketEl.appendChild(centerCol("F4", [matchEl(picks, 3, 0)]));
+    bracketEl.appendChild(centerCol("Final", [champEl(picks), matchEl(picks, 4, 0)]));
+    bracketEl.appendChild(centerCol("F4", [matchEl(picks, 3, 1)]));
+    regionCols(1, true).forEach(function (c) { bracketEl.appendChild(c); });
+  }
+
+  function renderMobile(picks) {
+    tabsEl.textContent = "";
+    ROUND_SHORT.forEach(function (label, k) {
+      var t = el("button", "tab");
+      t.type = "button";
+      t.setAttribute("role", "tab");
+      t.setAttribute("aria-selected", String(k === mobileRound));
+      t.appendChild(document.createTextNode(label));
+      var done = 0;
+      for (var i = 0; i < ROUND_SIZE[k]; i++) if (picks[OFFSET[k] + i] !== "-") done++;
+      t.appendChild(el("span", "count", done + "/" + ROUND_SIZE[k]));
+      t.addEventListener("click", function () { mobileRound = k; render(); });
+      tabsEl.appendChild(t);
+    });
+
+    roundsEl.textContent = "";
+    var k = mobileRound;
+    if (k < 3) {
+      var per = ROUND_SIZE[k] / 4;
+      for (var r = 0; r < 4; r++) {
+        roundsEl.appendChild(el("div", "rlabel", REGIONS[r]));
+        for (var j = 0; j < per; j++) roundsEl.appendChild(matchEl(picks, k, r * per + j));
+      }
+    } else if (k === 3) {
+      roundsEl.appendChild(el("div", "rlabel", REGIONS[0] + " v " + REGIONS[1]));
+      roundsEl.appendChild(matchEl(picks, 3, 0));
+      roundsEl.appendChild(el("div", "rlabel", REGIONS[2] + " v " + REGIONS[3]));
+      roundsEl.appendChild(matchEl(picks, 3, 1));
+    } else {
+      roundsEl.appendChild(el("div", "rlabel", "Championship"));
+      roundsEl.appendChild(matchEl(picks, 4, 0));
+      roundsEl.appendChild(champEl(picks));
+    }
+    if (k < 4) {
+      var next = el("button", "btn next-round", "Next: " + ROUND_NAMES[k + 1] + " →");
+      next.type = "button";
+      next.addEventListener("click", function () { mobileRound = k + 1; render(); window.scrollTo(0, 0); });
+      roundsEl.appendChild(next);
+    }
+  }
+
+  function render() {
+    var picks = activePicks();
+    document.body.classList.toggle("readonly", !!shared);
+    document.getElementById("editActions").hidden = !!shared;
+    document.getElementById("shareBtn").disabled = champion(own) == null;
+
+    var banner = document.getElementById("viewBanner");
+    banner.hidden = !shared;
+    if (shared) {
+      var who = shared.name ? shared.name + "’s" : "Someone’s";
+      var c = champion(shared.picks);
+      var txt = document.getElementById("viewText");
+      txt.textContent = "";
+      txt.appendChild(el("strong", "", who + " bracket"));
+      txt.appendChild(document.createTextNode(c != null ? " · champion: " + FIELD[c].t : " · still in progress"));
+      document.title = who + " October Surprise bracket";
+    } else {
+      document.title = "October Surprise";
+    }
+
+    var n = pickedCount(picks);
+    document.getElementById("progress").textContent = shared
+      ? n + " of " + N + " picks · read-only"
+      : (n === N ? "Bracket complete. Send it to someone who'll disagree."
+         : n + " of " + N + " picks · saves automatically in this browser");
+
+    renderDesktop(picks);
+    renderMobile(picks);
+  }
+
+  // ---------- dialogs ----------
+  var infoDialog = document.getElementById("infoDialog");
+  function showInfo(id) {
+    var f = FIELD[id];
+    document.getElementById("infoMeta").textContent =
+      REGIONS[Math.floor(id / 8)] + " · " + (id % 8 + 1) + " seed · " + f.w + " · " + f.y;
+    document.getElementById("infoTitle").textContent = f.t;
+    document.getElementById("infoBlurb").textContent = f.b;
+    openDialog(infoDialog);
+  }
+
+  function openDialog(d) {
+    if (typeof d.showModal === "function") d.showModal();
+    else d.setAttribute("open", "");
+  }
+  function closeDialog(d) {
+    if (typeof d.close === "function") d.close();
+    else d.removeAttribute("open");
+  }
+  document.querySelectorAll("dialog").forEach(function (d) {
+    d.addEventListener("click", function (e) {
+      if (e.target === d || e.target.hasAttribute("data-close")) closeDialog(d);
+    });
+  });
+
+  var shareDialog = document.getElementById("shareDialog");
+  var nameInput = document.getElementById("nameInput");
+  var linkOut = document.getElementById("linkOut");
+  var shareStatus = document.getElementById("shareStatus");
+  var nativeBtn = document.getElementById("nativeShareBtn");
+
+  function buildLink() {
+    var name = nameInput.value.replace(/[\u0000-\u001f]/g, "").trim().slice(0, 24);
+    safeSet(NAME_KEY, name);
+    var params = new URLSearchParams();
+    params.set("b", own.join(""));
+    if (name) params.set("n", name);
+    var link = SITE + "#" + params.toString();
+    linkOut.value = link;
+    document.getElementById("linkRow").hidden = false;
+    return link;
+  }
+
+  document.getElementById("shareBtn").addEventListener("click", function () {
+    nameInput.value = safeGet(NAME_KEY) || "";
+    shareStatus.textContent = "";
+    buildLink();
+    nativeBtn.hidden = typeof navigator.share !== "function";
+    openDialog(shareDialog);
+  });
+  nameInput.addEventListener("input", function () { buildLink(); shareStatus.textContent = ""; });
+
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var link = buildLink();
+    function fallback() {
+      linkOut.focus();
+      linkOut.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      shareStatus.textContent = ok ? "Copied." : "Select the link above and copy it.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { shareStatus.textContent = "Copied. Go start an argument."; }, fallback);
+    } else fallback();
+  });
+
+  nativeBtn.addEventListener("click", function () {
+    var link = buildLink();
+    var c = champion(own);
+    navigator.share({
+      title: "My October Surprise bracket",
+      text: c != null ? "My champion: " + FIELD[c].t + ". Fight me." : "My October Surprise bracket",
+      url: link
+    }).catch(function (e) { if (e && e.name !== "AbortError") console.warn("october: share failed", e); });
+  });
+
+  // ---------- top-level actions ----------
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (pickedCount(own) && !confirm("Clear every pick?")) return;
+    own = blank();
+    saveOwn();
+    mobileRound = 0;
+    render();
+  });
+
+  function leaveShared() {
+    shared = null;
+    history.replaceState(null, "", location.pathname + location.search);
+    mobileRound = 0;
+    render();
+  }
+  document.getElementById("ownBtn").addEventListener("click", leaveShared);
+  document.getElementById("adoptBtn").addEventListener("click", function () {
+    if (pickedCount(own) && own.join("") !== shared.picks.join("") &&
+        !confirm("Replace your own saved picks with these?")) return;
+    own = shared.picks.slice();
+    saveOwn();
+    leaveShared();
+  });
+
+  window.addEventListener("hashchange", function () {
+    shared = parseHash();
+    render();
+  });
+
+  // ---------- boot ----------
+  loadOwn();
+  shared = parseHash();
+  if (location.hash && !shared) history.replaceState(null, "", location.pathname + location.search);
+  render();
+})();
+</script>
+</body>
+</html>
