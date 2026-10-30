@@ -43,6 +43,9 @@
     --loser: #5c5650;
   }
 }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .doodle { background: #efe6d6; border-radius: 22%; }
+}
 
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -305,6 +308,117 @@ dialog input[type="text"] {
 }
 dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
 .status { font-family: var(--mono); font-size: 11px; color: var(--accent); min-height: 16px; margin: 6px 0 0; }
+/* ---------- doodles ---------- */
+.doodle { display: block; flex: none; overflow: visible; color: #221c18; }
+.doodle .sk { filter: url(#sk0); }
+.boil .doodle .sk, .doodle:hover .sk { animation: boil 0.45s steps(1) infinite; }
+@keyframes boil { 0% { filter: url(#sk0); } 33% { filter: url(#sk1); } 66% { filter: url(#sk2); } }
+.rounds .pick .doodle { margin-right: 2px; }
+.champ-doodle { position: relative; width: 96px; margin: 18px auto 0; color: var(--text); }
+.champ-doodle .crown { position: absolute; left: 50%; top: -14px; width: 40px; margin-left: -20px; }
+.bob { animation: bob 2.6s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-5px) rotate(2deg); } }
+.spin { transform-origin: 32px 32px; animation: spin 1.1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- hover card ---------- */
+.hovercard {
+  position: fixed;
+  z-index: 20;
+  width: 320px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+  padding: 14px 16px 14px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px) scale(0.98);
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.hovercard.show { opacity: 1; transform: none; }
+.hc-top { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+.hc-top .doodle { color: var(--text); }
+.hc-meta { font-family: var(--mono); font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+.hc-title { font-weight: 500; font-size: 17px; line-height: 1.25; margin-top: 2px; }
+.hovercard p, #infoDialog .extra p { margin: 0 0 8px; font-size: 14px; line-height: 1.45; }
+.quote { font-style: italic; border-left: 2px solid var(--accent); padding-left: 10px; }
+.fallout b { font-family: var(--mono); font-size: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-right: 4px; }
+.hc-hint { font-family: var(--mono); font-size: 10px; color: var(--muted); margin: 0 !important; }
+#infoDoodle { float: right; margin: -6px -4px 4px 10px; color: var(--text); }
+
+/* ---------- trash talk ---------- */
+.bubble {
+  position: fixed;
+  z-index: 25;
+  pointer-events: none;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 7px 11px;
+  border-radius: 14px;
+  white-space: nowrap;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: translate(-50%, -100%);
+  opacity: 0;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--text);
+}
+.bubble.pop { animation: pop 1.9s ease forwards; }
+@keyframes pop {
+  0% { opacity: 0; transform: translate(-50%, -80%) scale(0.6) rotate(-6deg); }
+  12% { opacity: 1; transform: translate(-50%, -112%) scale(1.08) rotate(2deg); }
+  20% { transform: translate(-50%, -105%) scale(1) rotate(-1deg); }
+  85% { opacity: 1; transform: translate(-50%, -105%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -125%) scale(0.96); }
+}
+.team.wobble { animation: wobble 0.45s ease; }
+@keyframes wobble { 0%, 100% { transform: none; } 25% { transform: translateX(-3px) rotate(-1deg); } 50% { transform: translateX(3px) rotate(1deg); } 75% { transform: translateX(-2px); } }
+.team.won.stamp { animation: stamp 0.35s cubic-bezier(.3,1.6,.5,1); }
+@keyframes stamp { 0% { transform: scale(1.12); } 100% { transform: none; } }
+
+/* ---------- ambience ---------- */
+body { position: relative; overflow-x: clip; }
+.ambience { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+header.top, .banner, .progress, .bracket-wrap, .tabs, .rounds, footer { position: relative; z-index: 1; }
+.tabs { z-index: 3; }
+.leaf { position: absolute; top: -40px; width: 22px; height: 22px; opacity: 0.55; animation: fall linear infinite; }
+@keyframes fall {
+  0% { transform: translate3d(0, -5vh, 0) rotate(0deg); }
+  25% { transform: translate3d(28px, 25vh, 0) rotate(90deg); }
+  50% { transform: translate3d(-12px, 55vh, 0) rotate(200deg); }
+  75% { transform: translate3d(22px, 82vh, 0) rotate(290deg); }
+  100% { transform: translate3d(0, 112vh, 0) rotate(380deg); }
+}
+.vanlane { position: absolute; top: 0; left: 0; right: 0; height: 34px; overflow: hidden; pointer-events: none; z-index: 2; }
+.van { position: absolute; left: 0; top: 3px; transform: translateX(-260px); display: flex; align-items: flex-end; gap: 0; }
+.vanlane.go .van { animation: drive 11s linear forwards; }
+@keyframes drive { from { transform: translateX(-260px); } to { transform: translateX(calc(100vw + 40px)); } }
+.van .tow { display: none; align-items: center; }
+.vanlane.towing .van .tow { display: flex; }
+.van .bounce { animation: bump 0.5s ease-in-out infinite; }
+@keyframes bump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1px); } }
+header.top { padding-top: 40px; }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ambience, .vanlane { display: none; }
+  .bob, .spin, .boil .doodle .sk, .doodle:hover .sk, .team.wobble, .team.won.stamp, .van .bounce { animation: none !important; }
+  .bubble.pop { animation: none; opacity: 1; transform: translate(-50%, -105%); }
+  .hovercard { transition: none; transform: none; }
+}
 </style>
 </head>
 <body>
@@ -343,7 +457,9 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
 <dialog id="infoDialog">
   <p class="meta" id="infoMeta"></p>
   <h2 id="infoTitle"></h2>
+  <div id="infoDoodle"></div>
   <p id="infoBlurb"></p>
+  <div class="extra" id="infoExtra"></div>
   <div class="row">
     <a class="btn" id="infoWiki" target="_blank" rel="noopener">Wikipedia ↗</a>
     <button class="btn" type="button" data-close>Close</button>
@@ -367,6 +483,30 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
   </div>
 </dialog>
 
+<div class="ambience" id="ambience" aria-hidden="true"></div>
+<div class="vanlane" id="vanlane" aria-hidden="true">
+  <div class="van">
+    <span class="tow"><svg width="96" height="22" viewBox="0 0 96 22"><rect x="1" y="3" width="78" height="16" rx="2" fill="#c25b3f"/><text x="40" y="14.5" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#fff">BREAKING</text><path d="M79 11 H96" stroke="#8a8480" stroke-width="1.2"/></svg></span>
+    <svg class="bounce" width="64" height="30" viewBox="0 0 64 30" shape-rendering="crispEdges">
+      <path d="M22 8 h6" stroke="#8a8480" stroke-width="2"/><path d="M19 1 q6 7 12 0" fill="none" stroke="#8a8480" stroke-width="2" shape-rendering="auto"/>
+      <rect x="2" y="9" width="46" height="15" fill="#f7f4ef" stroke="#1a1a1a" stroke-width="2"/>
+      <path d="M48 12 h8 l6 7 v5 h-14z" fill="#f7f4ef" stroke="#1a1a1a" stroke-width="2"/>
+      <rect x="50" y="14" width="5" height="4" fill="#7fb3d5"/>
+      <rect x="2" y="17" width="46" height="3" fill="#c25b3f"/>
+      <text x="8" y="16" font-family="monospace" font-size="6" font-weight="700" fill="#1a1a1a">NEWS 7</text>
+      <rect x="10" y="22" width="7" height="7" fill="#1a1a1a"/><rect x="47" y="22" width="7" height="7" fill="#1a1a1a"/>
+    </svg>
+  </div>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="sk0"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="1.15"/></filter>
+  <filter id="sk1"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="1.15"/></filter>
+  <filter id="sk2"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="13"/><feDisplacementMap in="SourceGraphic" scale="1.15"/></filter>
+</svg>
+<div class="hovercard" id="hovercard" role="tooltip" aria-hidden="true"></div>
+<div class="bubble" id="bubble" aria-hidden="true"></div>
+<div class="sr" id="sr" aria-live="polite"></div>
+
 <script>
 (function () {
   "use strict";
@@ -376,41 +516,41 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
   var REGIONS = ["Gaffes", "Scandals", "October Surprises", "Implosions"];
   var FIELD = [
     // Gaffes
-    { t: "The Dean Scream", w: "Howard Dean", y: "2004", b: "Iowa caucus night: a ballroom, a hoarse governor, and a mic that picked up exactly one voice. He was the frontrunner going in and a punchline by breakfast.", wk: "Dean scream" },
-    { t: "“47 percent”", w: "Mitt Romney", y: "2012", b: "Told Boca Raton donors that 47% of Americans would vote for the president “no matter what” and see themselves as victims. The bartender was recording, and Mother Jones had it by September.", wk: "Mitt Romney 47 percent remark" },
-    { t: "“Basket of deplorables”", w: "Hillary Clinton", y: "2016", b: "Put “half” of Trump’s supporters in it at a New York fundraiser. They had it on T-shirts within the week.", wk: "Basket of deplorables" },
-    { t: "“Mission Accomplished”", w: "George W. Bush", y: "2003", b: "A flight suit, an aircraft carrier, and a banner. The Iraq War went on for more than eight years after that.", wk: "Mission Accomplished speech" },
-    { t: "“All of ’em, any of ’em”", w: "Sarah Palin", y: "2008", b: "Katie Couric asked which newspapers she read. Tina Fey barely had to change the words.", wk: "Sarah Palin Katie Couric interview" },
-    { t: "“Binders full of women”", w: "Mitt Romney", y: "2012", b: "Second debate, a point about hiring women in Massachusetts. The Tumblr went up before the debate was over.", wk: "John Kerry 2004 presidential campaign" },
-    { t: "“Voted for it before I voted against it”", w: "John Kerry", y: "2004", b: "About the $87 billion for Iraq. Ten words that wrote the Bush campaign’s flip-flop ads for it.", wk: "Barack Obama 2008 presidential campaign" },
-    { t: "“Cling to guns or religion”", w: "Barack Obama", y: "2008", b: "Told a closed-door San Francisco fundraiser that “bitter” small-town voters cling to guns or religion. It did not stay closed-door.", wk: "Binders full of women" },
+    { t: "The Dean Scream", w: "Howard Dean", y: "2004", b: "Iowa caucus night: a ballroom, a hoarse governor, and a mic that picked up exactly one voice. He was the frontrunner going in and a punchline by breakfast.", wk: "Dean scream", d: {"face": "round", "hair": "short", "col": "brown", "brows": "up", "mouth": "yell", "prop": "mic"}, q: "…and then we’re going to Washington, D.C., to take back the White House! YEAAAH!", f: "Finished third in Iowa and was out within a month. He then became DNC chair and ran the 50-state strategy.", tt: "YEEEAAARGH!" },
+    { t: "“47 percent”", w: "Mitt Romney", y: "2012", b: "Told Boca Raton donors that 47% of Americans would vote for the president “no matter what” and see themselves as victims. The bartender was recording, and Mother Jones had it by September.", wk: "Mitt Romney 47 percent remark", d: {"face": "square", "hair": "swoop", "col": "dark", "mouth": "smile", "prop": "cocktail"}, q: "There are 47 percent of the people who will vote for the president no matter what.", f: "Romney later called it “completely wrong.” He lost with 47 percent of the vote.", tt: "Not you, of course." },
+    { t: "“Basket of deplorables”", w: "Hillary Clinton", y: "2016", b: "Put “half” of Trump’s supporters in it at a New York fundraiser. They had it on T-shirts within the week.", wk: "Basket of deplorables", d: {"face": "round", "hair": "bob", "col": "blond", "mouth": "smirk", "prop": "basket"}, q: "You could put half of Trump’s supporters into what I call the basket of deplorables.", f: "The next day she said she regretted saying “half.”", tt: "Half. I said half." },
+    { t: "“Mission Accomplished”", w: "George W. Bush", y: "2003", b: "A flight suit, an aircraft carrier, and a banner. The Iraq War went on for more than eight years after that.", wk: "Mission Accomplished speech", d: {"face": "square", "hair": "short", "col": "gray", "mouth": "smirk", "prop": "banner"}, q: "Major combat operations in Iraq have ended.", f: "The White House said the crew asked for the banner. The White House also made the banner.", tt: "Nailed it." },
+    { t: "“All of ’em, any of ’em”", w: "Sarah Palin", y: "2008", b: "Katie Couric asked which newspapers she read. Tina Fey barely had to change the words.", wk: "Sarah Palin Katie Couric interview", d: {"face": "oval", "hair": "beehive", "col": "brown", "glasses": "round", "mouth": "smile", "prop": "papers"}, q: "All of ’em, any of ’em that have been in front of me over all these years.", f: "McCain–Palin lost by seven points. She resigned as governor the next July and went into TV.", tt: "You betcha." },
+    { t: "“Binders full of women”", w: "Mitt Romney", y: "2012", b: "Second debate, a point about hiring women in Massachusetts. The Tumblr went up before the debate was over.", wk: "John Kerry 2004 presidential campaign", d: {"face": "square", "hair": "swoop", "col": "dark", "mouth": "smile", "prop": "binder"}, q: "…they brought us whole binders full of women.", f: "Within hours there was a Tumblr, a Facebook page and a wave of joke Amazon reviews of binders.", tt: "Collated with care." },
+    { t: "“Voted for it before I voted against it”", w: "John Kerry", y: "2004", b: "About the $87 billion for Iraq. Ten words that wrote the Bush campaign’s flip-flop ads for it.", wk: "Barack Obama 2008 presidential campaign", d: {"face": "long", "hair": "tall", "col": "gray", "mouth": "o", "prop": "sail"}, q: "I actually did vote for the $87 billion before I voted against it.", f: "Bush ran a windsurfing ad of him tacking back and forth. Kerry lost Ohio, and with it the election.", tt: "Before. Then against." },
+    { t: "“Cling to guns or religion”", w: "Barack Obama", y: "2008", b: "Told a closed-door San Francisco fundraiser that “bitter” small-town voters cling to guns or religion. It did not stay closed-door.", wk: "Binders full of women", d: {"face": "oval", "hair": "short", "col": "dark", "mouth": "smile", "prop": "podium"}, q: "…they get bitter, they cling to guns or religion…", f: "Clinton pressed the attack for weeks. He won the nomination and the presidency anyway.", tt: "Bitter? Who’s bitter?" },
     // Scandals
-    { t: "The Weiner tweet", w: "Anthony Weiner", y: "2011", b: "Tweeted a photo he meant to DM, then claimed he’d been hacked. He resigned, came back as “Carlos Danger” in 2013, and his laptop has a cameo elsewhere in this bracket.", wk: "Anthony Weiner sexting scandals" },
-    { t: "“Hiking the Appalachian Trail”", w: "Mark Sanford", y: "2009", b: "South Carolina’s governor vanished for six days while staff said he was hiking. He was in Buenos Aires. Four years later he was back in Congress.", wk: "Mark Sanford" },
-    { t: "Everything about George Santos", w: "George Santos", y: "2022", b: "Baruch, Goldman, Citigroup, star volleyball player: almost none of it was true. He became only the sixth member ever expelled from the House.", wk: "George Santos" },
-    { t: "Client 9", w: "Eliot Spitzer", y: "2008", b: "The governor who made his name busting prostitution rings turned out to be a client of one. He resigned within the week.", wk: "Eliot Spitzer prostitution scandal" },
-    { t: "“A wide stance”", w: "Larry Craig", y: "2007", b: "Arrested in a Minneapolis airport bathroom stall, pleaded guilty, then explained he just had a wide stance.", wk: "Larry Craig scandal" },
-    { t: "The gold bars", w: "Bob Menendez", y: "2024", b: "The FBI found gold bars and about $480,000 in cash, some of it stuffed into his own jackets. He was convicted on all 16 counts.", wk: "Bob Menendez" },
-    { t: "The Rielle Hunter affair", w: "John Edwards", y: "2008", b: "Denied an affair with his campaign videographer while his wife was fighting cancer, then denied the baby. Eventually he admitted both.", wk: "John Edwards extramarital affair" },
-    { t: "Bridgegate", w: "Chris Christie", y: "2013", b: "“Time for some traffic problems in Fort Lee.” Lanes onto the George Washington Bridge closed for four days, apparently to punish a mayor.", wk: "Fort Lee lane closure scandal" },
+    { t: "The Weiner tweet", w: "Anthony Weiner", y: "2011", b: "Tweeted a photo he meant to DM, then claimed he’d been hacked. He resigned, came back as “Carlos Danger” in 2013, and his laptop has a cameo elsewhere in this bracket.", wk: "Anthony Weiner sexting scandals", d: {"face": "long", "hair": "short", "col": "dark", "mouth": "grimace", "prop": "phone"}, f: "Sexting caught up with him again in 2016, and in 2017 he was sentenced to 21 months in prison.", tt: "I was hacked. (I was not hacked.)" },
+    { t: "“Hiking the Appalachian Trail”", w: "Mark Sanford", y: "2009", b: "South Carolina’s governor vanished for six days while staff said he was hiking. He was in Buenos Aires. Four years later he was back in Congress.", wk: "Mark Sanford", d: {"face": "long", "hair": "short", "col": "gray", "mouth": "smile", "prop": "trail"}, q: "I’ve been unfaithful to my wife.", f: "Divorced and censured by the state House, he won his old congressional seat back in 2013.", tt: "Just out hiking." },
+    { t: "Everything about George Santos", w: "George Santos", y: "2022", b: "Baruch, Goldman, Citigroup, star volleyball player: almost none of it was true. He became only the sixth member ever expelled from the House.", wk: "George Santos", d: {"face": "round", "hair": "swoop", "col": "dark", "glasses": "round", "mouth": "smirk", "prop": "volleyball"}, f: "Pleaded guilty to wire fraud and aggravated identity theft and was sentenced to 87 months.", tt: "I also invented volleyball." },
+    { t: "Client 9", w: "Eliot Spitzer", y: "2008", b: "The governor who made his name busting prostitution rings turned out to be a client of one. He resigned within the week.", wk: "Eliot Spitzer prostitution scandal", d: {"face": "long", "hair": "bald", "col": "gray", "mouth": "grimace", "prop": "tag9"}, q: "I have acted in a way that violates my obligations to my family…", f: "Resigned, got a CNN show, then ran for New York City comptroller in 2013 and lost.", tt: "Client who?" },
+    { t: "“A wide stance”", w: "Larry Craig", y: "2007", b: "Arrested in a Minneapolis airport bathroom stall, pleaded guilty, then explained he just had a wide stance.", wk: "Larry Craig scandal", d: {"face": "square", "hair": "short", "col": "gray", "glasses": "round", "mouth": "o", "prop": "stance"}, q: "I am not gay. I never have been gay.", f: "Said he would resign, changed his mind, and served out his term. He did not run again.", tt: "Wide stance, baby." },
+    { t: "The gold bars", w: "Bob Menendez", y: "2024", b: "The FBI found gold bars and about $480,000 in cash, some of it stuffed into his own jackets. He was convicted on all 16 counts.", wk: "Bob Menendez", d: {"face": "square", "hair": "slick", "col": "gray", "mouth": "smirk", "prop": "gold"}, f: "Resigned from the Senate in August 2024 and was sentenced to 11 years in prison.", tt: "Those are my savings." },
+    { t: "The Rielle Hunter affair", w: "John Edwards", y: "2008", b: "Denied an affair with his campaign videographer while his wife was fighting cancer, then denied the baby. Eventually he admitted both.", wk: "John Edwards extramarital affair", d: {"face": "oval", "hair": "swoop", "col": "brown", "mouth": "smile", "prop": "camera"}, q: "I made a serious error in judgment.", f: "Indicted on campaign-finance charges in 2011. Acquitted on one count, mistrial on the rest, and prosecutors dropped it.", tt: "Two Americas. Two stories." },
+    { t: "Bridgegate", w: "Chris Christie", y: "2013", b: "“Time for some traffic problems in Fort Lee.” Lanes onto the George Washington Bridge closed for four days, apparently to punish a mayor.", wk: "Fort Lee lane closure scandal", d: {"face": "round", "hair": "short", "col": "dark", "mouth": "smirk", "prop": "cone"}, q: "I am not a bully.", f: "Two aides were convicted. The Supreme Court overturned the convictions in 2020, and Christie was never charged.", tt: "Traffic? What traffic?" },
     // October Surprises
-    { t: "The Access Hollywood tape", w: "Donald Trump", y: "Oct 2016", b: "Came out on a Friday afternoon, and every pundit called it the end of the campaign. He won a month later.", wk: "Donald Trump Access Hollywood tape" },
-    { t: "The Comey letter", w: "James Comey", y: "Oct 2016", b: "Eleven days out, the FBI director told Congress there were new Clinton emails. They turned up on Anthony Weiner’s laptop, and nothing came of them except possibly the election.", wk: "Comey letter" },
-    { t: "Hunter Biden’s laptop", w: "Hunter Biden", y: "Oct 2020", b: "Left at a Delaware repair shop, then landed in the New York Post. Twitter’s decision to block the link became its own scandal about the first one.", wk: "Hunter Biden laptop controversy" },
-    { t: "The bin Laden tape", w: "Osama bin Laden", y: "Oct 2004", b: "A new video from the man himself, four days before the election. Suddenly the race was about 9/11 again.", wk: "2004 Osama bin Laden video" },
-    { t: "The Foley messages", w: "Mark Foley", y: "Oct 2006", b: "The co-chair of the House caucus on missing and exploited children resigned over explicit messages to teenage House pages. Republicans lost the House five weeks later.", wk: "Mark Foley scandal" },
-    { t: "“Floating island of garbage”", w: "MSG rally", y: "Oct 2024", b: "A warm-up comic’s line about Puerto Rico. Biden answered with a “garbage” line of his own, then Trump showed up in a garbage truck. Nobody won this one except the truck.", wk: "2024 Donald Trump rally at Madison Square Garden" },
-    { t: "The DUI", w: "George W. Bush", y: "Nov 2000", b: "Five days out, a 1976 drunk-driving arrest in Maine surfaced. Strictly speaking it was a November surprise, and the committee allowed it.", wk: "George W. Bush 1976 DUI arrest" },
-    { t: "Sandy and the “hug”", w: "Chris Christie", y: "Oct 2012", b: "A week before the election, Christie toured the storm damage with Obama and had nice things to say about him. It was a handshake, but some Republicans still haven’t forgiven the hug.", wk: "Hurricane Sandy" },
+    { t: "The Access Hollywood tape", w: "Donald Trump", y: "Oct 2016", b: "Came out on a Friday afternoon, and every pundit called it the end of the campaign. He won a month later.", wk: "Donald Trump Access Hollywood tape", d: {"face": "square", "hair": "swoop", "col": "blond", "mouth": "o", "prop": "bus"}, q: "This was locker room banter.", f: "He won the election 32 days later.", tt: "Locker room talk." },
+    { t: "The Comey letter", w: "James Comey", y: "Oct 2016", b: "Eleven days out, the FBI director told Congress there were new Clinton emails. They turned up on Anthony Weiner’s laptop, and nothing came of them except possibly the election.", wk: "Comey letter", d: {"prop": "envelope"}, q: "…the FBI has learned of the existence of emails that appear to be pertinent to the investigation.", f: "Two days before the election he said the emails changed nothing. He was fired six months later.", tt: "Just a quick update." },
+    { t: "Hunter Biden’s laptop", w: "Hunter Biden", y: "Oct 2020", b: "Left at a Delaware repair shop, then landed in the New York Post. Twitter’s decision to block the link became its own scandal about the first one.", wk: "Hunter Biden laptop controversy", d: {"prop": "laptop"}, f: "Hunter Biden was later convicted on gun charges and pleaded guilty to tax charges. His father pardoned him in December 2024.", tt: "Have you tried restarting it?" },
+    { t: "The bin Laden tape", w: "Osama bin Laden", y: "Oct 2004", b: "A new video from the man himself, four days before the election. Suddenly the race was about 9/11 again.", wk: "2004 Osama bin Laden video", d: {"prop": "vhs"}, f: "Bush won by about 2.4 points. Kerry later partly blamed the tape.", tt: "Be kind, rewind." },
+    { t: "The Foley messages", w: "Mark Foley", y: "Oct 2006", b: "The co-chair of the House caucus on missing and exploited children resigned over explicit messages to teenage House pages. Republicans lost the House five weeks later.", wk: "Mark Foley scandal", d: {"face": "oval", "hair": "short", "col": "gray", "mouth": "grimace", "prop": "phone"}, f: "Democrats took the House that November and Nancy Pelosi became Speaker.", tt: "No comment." },
+    { t: "“Floating island of garbage”", w: "MSG rally", y: "Oct 2024", b: "A warm-up comic’s line about Puerto Rico. Biden answered with a “garbage” line of his own, then Trump showed up in a garbage truck. Nobody won this one except the truck.", wk: "2024 Donald Trump rally at Madison Square Garden", d: {"prop": "truck"}, q: "There’s literally a floating island of garbage in the middle of the ocean right now.", f: "Trump held a press event from inside a garbage truck in Green Bay three days later, then won the election.", tt: "Beep beep." },
+    { t: "The DUI", w: "George W. Bush", y: "Nov 2000", b: "Five days out, a 1976 drunk-driving arrest in Maine surfaced. Strictly speaking it was a November surprise, and the committee allowed it.", wk: "George W. Bush 1976 DUI arrest", d: {"face": "square", "hair": "short", "col": "gray", "mouth": "smirk", "prop": "beer"}, q: "I’m not proud of that.", f: "He lost the popular vote by half a point and won Florida by 537 votes.", tt: "That was 1976!" },
+    { t: "Sandy and the “hug”", w: "Chris Christie", y: "Oct 2012", b: "A week before the election, Christie toured the storm damage with Obama and had nice things to say about him. It was a handshake, but some Republicans still haven’t forgiven the hug.", wk: "Hurricane Sandy", d: {"prop": "hurricane"}, q: "The president has been all over this, and he deserves great credit.", f: "Obama won a week later. Christie spent years explaining the handshake to Republican primary voters.", tt: "It was a handshake." },
     // Implosions
-    { t: "The debate", w: "Joe Biden", y: "2024", b: "Ninety minutes in Atlanta, including “We finally beat Medicare.” He was out of the race 24 days later.", wk: "2024 Joe Biden–Donald Trump presidential debate" },
-    { t: "“Oops”", w: "Rick Perry", y: "2011", b: "Promised to eliminate three federal agencies and could only name two. The third was Energy, which he later ran as Secretary of Energy.", wk: "Rick Perry 2012 presidential campaign" },
-    { t: "“Legitimate rape”", w: "Todd Akin", y: "2012", b: "Said the female body can “shut that whole thing down.” That turned a safe Missouri Senate pickup into a 15-point loss.", wk: "Todd Akin rape and pregnancy comments" },
-    { t: "9-9-9, then nothing", w: "Herman Cain", y: "2011", b: "He was leading national polls in October. By December the campaign was over, after harassment allegations and a very long pause on Libya.", wk: "Herman Cain 2012 presidential campaign" },
-    { t: "“Please clap”", w: "Jeb Bush", y: "2016", b: "A $100 million super PAC, the most famous last name in Republican politics, and a New Hampshire crowd that had to be asked.", wk: "Jeb Bush 2016 presidential campaign" },
-    { t: "The Iowa caucus app", w: "Iowa Democrats", y: "2020", b: "A new app was supposed to report the results. Days passed before there were results, and Iowa eventually lost its first-in-the-nation slot.", wk: "2020 Iowa Democratic presidential caucuses" },
-    { t: "The Twitter Spaces launch", w: "Ron DeSantis", y: "2023", b: "Announced his campaign on a Twitter audio stream with Elon Musk, which fell over for about 20 minutes. It went roughly like that from there.", wk: "Ron DeSantis 2024 presidential campaign" },
-    { t: "“Another Yankee fan”", w: "Martha Coakley", y: "2010", b: "The heavy favorite for Ted Kennedy’s Senate seat called Curt Schilling a Yankees fan, then lost the seat to Scott Brown. In Massachusetts.", wk: "2010 United States Senate special election in Massachusetts" }
+    { t: "The debate", w: "Joe Biden", y: "2024", b: "Ninety minutes in Atlanta, including “We finally beat Medicare.” He was out of the race 24 days later.", wk: "2024 Joe Biden–Donald Trump presidential debate", d: {"face": "long", "hair": "short", "col": "white", "glasses": "aviator", "mouth": "o", "prop": "podium"}, q: "We finally beat Medicare.", f: "Dropped out on July 21 and endorsed Kamala Harris, who lost to Trump in November.", tt: "Here’s the deal." },
+    { t: "“Oops”", w: "Rick Perry", y: "2011", b: "Promised to eliminate three federal agencies and could only name two. The third was Energy, which he later ran as Secretary of Energy.", wk: "Rick Perry 2012 presidential campaign", d: {"face": "square", "hair": "tall", "col": "dark", "glasses": "round", "mouth": "o", "prop": "fingers"}, q: "The third one, I can’t. Sorry. Oops.", f: "Out of the race by January 2012. In 2017 he became Secretary of Energy.", tt: "Oops." },
+    { t: "“Legitimate rape”", w: "Todd Akin", y: "2012", b: "Said the female body can “shut that whole thing down.” That turned a safe Missouri Senate pickup into a 15-point loss.", wk: "Todd Akin rape and pregnancy comments", d: {"face": "oval", "hair": "short", "col": "gray", "mouth": "grimace", "prop": "book"}, q: "If it’s a legitimate rape, the female body has ways to try to shut that whole thing down.", f: "Lost to Claire McCaskill by about 15 points.", tt: "Wrong words, wrong way." },
+    { t: "9-9-9, then nothing", w: "Herman Cain", y: "2011", b: "He was leading national polls in October. By December the campaign was over, after harassment allegations and a very long pause on Libya.", wk: "Herman Cain 2012 presidential campaign", d: {"face": "round", "hair": "bald", "col": "dark", "stache": true, "mouth": "smile", "prop": "pizza"}, q: "OK, Libya.", f: "Suspended his campaign in December 2011.", tt: "9-9-9!" },
+    { t: "“Please clap”", w: "Jeb Bush", y: "2016", b: "A $100 million super PAC, the most famous last name in Republican politics, and a New Hampshire crowd that had to be asked.", wk: "Jeb Bush 2016 presidential campaign", d: {"face": "long", "hair": "short", "col": "gray", "glasses": "round", "mouth": "smile", "prop": "jeb"}, q: "Please clap.", f: "Out after South Carolina, with a handful of delegates for one of the most expensive campaigns ever.", tt: "Please clap." },
+    { t: "The Iowa caucus app", w: "Iowa Democrats", y: "2020", b: "A new app was supposed to report the results. Days passed before there were results, and Iowa eventually lost its first-in-the-nation slot.", wk: "2020 Iowa Democratic presidential caucuses", d: {"prop": "spinner"}, f: "Results took days. The state party chair resigned, and Democrats moved South Carolina to the front of the 2024 calendar.", tt: "Loading…" },
+    { t: "The Twitter Spaces launch", w: "Ron DeSantis", y: "2023", b: "Announced his campaign on a Twitter audio stream with Elon Musk, which fell over for about 20 minutes. It went roughly like that from there.", wk: "Ron DeSantis 2024 presidential campaign", d: {"face": "square", "hair": "short", "col": "dark", "mouth": "smirk", "prop": "wifi"}, q: "We’ve got so many people here that we are kind of melting the servers. — Elon Musk", f: "Finished a distant second in Iowa and dropped out the following January.", tt: "Can you hear me now?" },
+    { t: "“Another Yankee fan”", w: "Martha Coakley", y: "2010", b: "The heavy favorite for Ted Kennedy’s Senate seat called Curt Schilling a Yankees fan, then lost the seat to Scott Brown. In Massachusetts.", wk: "2010 United States Senate special election in Massachusetts", d: {"face": "oval", "hair": "bob", "col": "brown", "mouth": "o", "prop": "baseball"}, q: "Another Yankee fan.", f: "Scott Brown won by about five points and ended the Democrats’ 60-seat Senate supermajority.", tt: "Go… Yankees?" }
   ];
 
   var ROUND_NAMES = ["Round of 32", "Sweet 16", "Elite 8", "Final Four", "Championship"];
@@ -500,6 +640,7 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
     }
     saveOwn();
     render();
+    trashTalk(m, slot);
   }
 
   function activePicks() { return shared ? shared.picks : own; }
@@ -518,11 +659,244 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
     return e;
   }
 
-  function matchEl(picks, k, i) {
+
+  // ---------- doodle kit ----------
+  // Cartoon line art from parts. Recognizability comes from hair, glasses, expression and props.
+  var HAIR = { dark: "#3b2f2a", brown: "#7a5232", blond: "#d8b263", gray: "#b9b2a9", white: "#e9e6e1" };
+  var INK = "currentColor", SKIN = "#fbf1e1", SUIT = "#55606c";
+
+  function txt(x, y, size, str, fill, extra) {
+    return '<text x="' + x + '" y="' + y + '" font-family="monospace" font-weight="700" font-size="' + size +
+      '" fill="' + (fill || INK) + '" stroke="none" text-anchor="middle"' + (extra || "") + '>' + str + '</text>';
+  }
+
+  var PROPS = {
+    mic: '<path d="M47 49 L56 61" stroke-width="4"/><circle cx="45" cy="46" r="5" fill="#9aa0a6"/><path d="M42 44 l6 4 M41 47 l6 3" stroke-width="0.8"/>',
+    cocktail: '<path d="M43 42 h14 l-7 8z" fill="#cfe8f3"/><path d="M50 50 v8 M46 58 h8"/><circle cx="48" cy="45" r="1.6" fill="#7aa33d"/>',
+    basket: '<path d="M42 50 Q50 38 58 50" fill="none"/><path d="M40 50 h20 l-3 12 h-14z" fill="#c9a36a"/><path d="M44 54 h12 M43 58 h14 M47 50 v12 M53 50 v12" stroke-width="0.8"/>',
+    banner: '<rect x="1" y="1" width="62" height="10" fill="#c25b3f"/><rect x="1" y="1" width="9" height="10" fill="#2e4f8a"/>' +
+      txt(37, 8.4, 4.3, "MISSION ACCOMPLISHED", "#fff") + '<path d="M18 54 l3 10 M46 54 l-3 10" stroke="#c9b48a" stroke-width="2"/>',
+    papers: '<rect x="44" y="46" width="16" height="14" fill="#fff" transform="rotate(-8 52 53)"/><rect x="42" y="48" width="16" height="14" fill="#fff"/><path d="M45 52 h10 M45 55 h10 M45 58 h7" stroke-width="0.8"/>' + txt(56, 47, 6, "?", "#c25b3f"),
+    binder: '<rect x="40" y="43" width="20" height="20" rx="2" fill="#c25b3f"/><circle cx="42.5" cy="48" r="1.3" fill="#fff"/><circle cx="42.5" cy="53" r="1.3" fill="#fff"/><circle cx="42.5" cy="58" r="1.3" fill="#fff"/>' + txt(51.5, 55, 4, "WOMEN", "#fff"),
+    sail: '<path d="M52 24 V60"/><path d="M52 26 L52 58 L63 54z" fill="#c25b3f"/><path d="M52 34 L60 51" stroke="#fff" stroke-width="1.5"/><path d="M44 61 h18" stroke-width="2.2"/>',
+    podium: '<path d="M16 52 h32 l-3 12 h-26z" fill="#8a6a4a"/><circle cx="32" cy="57.5" r="3.2" fill="#d8b263"/>',
+    phone: '<rect x="45" y="40" width="12" height="20" rx="2.5" fill="#2b2b2b"/><rect x="47" y="43" width="8" height="12" fill="#9fd3ef" stroke="none"/><path d="M60 38 l3 -3 M61 42 h4" stroke="#c25b3f" stroke-width="1.4"/>',
+    trail: '<path d="M54 40 V63" stroke-width="2"/><path d="M44 40 h18 l3 4 -3 4 h-18z" fill="#4a7c59"/>' + txt(52, 46.5, 5.5, "A.T.", "#fff") + '<path d="M18 52 Q24 48 30 54 M46 52 Q40 48 34 54" stroke="#c9a36a" stroke-width="2.4" fill="none"/>',
+    volleyball: '<circle cx="52" cy="52" r="8" fill="#fff"/><path d="M44.5 50 Q52 52 58 46 M48 59 Q51 52 49 45 M59.5 54 Q53 53 49 59" stroke-width="1" fill="none"/>' + txt(36, 12, 7, "★", "#d8b263"),
+    tag9: '<path d="M44 46 l14 -4 3 10 -14 4z" fill="#f3dfd6"/><circle cx="47" cy="48" r="1" fill="none"/><path d="M47 48 Q40 45 36 52" fill="none" stroke-width="0.8"/>' + txt(53, 52, 7, "9", "#c25b3f", ' transform="rotate(-16 53 50)"'),
+    stance: '<ellipse cx="9" cy="61" rx="7" ry="2.6" fill="#2b2b2b"/><ellipse cx="55" cy="61" rx="7" ry="2.6" fill="#2b2b2b"/><path d="M19 61 h-5 l2 -2 M14 61 l2 2 M45 61 h5 l-2 -2 M50 61 l-2 2" stroke="#c25b3f" stroke-width="1.2"/>',
+    gold: '<path d="M38 63 l3 -6 h11 l3 6z" fill="#e2b33c"/><path d="M48 63 l3 -6 h9 l3 6z" fill="#e2b33c"/><path d="M43 57 l3 -6 h9 l3 6z" fill="#f0c85a"/><rect x="2" y="54" width="13" height="7" rx="1" fill="#8fbf7f" transform="rotate(-12 8 57)"/>' + txt(8, 59.5, 5, "$", "#2f5d2a", ' transform="rotate(-12 8 57)"'),
+    camera: '<rect x="42" y="46" width="16" height="11" rx="2" fill="#3a3a3a"/><path d="M58 49 l5 -3 v11 l-5 -3z" fill="#3a3a3a"/><circle cx="45" cy="43" r="3" fill="none"/><circle cx="52" cy="43" r="3" fill="none"/><circle cx="56" cy="49" r="1.2" fill="#e04b3b" stroke="none"/>',
+    cone: '<path d="M46 62 l6 -20 l6 20z" fill="#f08a2b"/><path d="M48.3 54 h7.4 M49.6 49 h4.8" stroke="#fff" stroke-width="2"/><path d="M43 62 h18" stroke-width="2.2"/>',
+    bus: '<rect x="36" y="48" width="27" height="12" rx="2" fill="#3a6fb0"/><rect x="38" y="50" width="5" height="4" fill="#cfe8f3" stroke="none"/><rect x="45" y="50" width="5" height="4" fill="#cfe8f3" stroke="none"/><rect x="52" y="50" width="5" height="4" fill="#cfe8f3" stroke="none"/><circle cx="41" cy="61" r="2.2" fill="#2b2b2b"/><circle cx="57" cy="61" r="2.2" fill="#2b2b2b"/>' + txt(49.5, 59, 3.3, "ACCESS", "#fff") + '<rect x="3" y="45" width="5" height="10" rx="2.5" fill="#9aa0a6"/><path d="M5.5 55 v6" />',
+    beer: '<rect x="43" y="46" width="12" height="15" rx="1.5" fill="#f2c14e"/><path d="M55 49 h3 q2 0 2 3 v3 q0 3 -2 3 h-3" fill="none"/><path d="M42 46 q2 -4 5 -2 q2 -3 5 0 q3 -2 4 2z" fill="#fff"/>',
+    fingers: '<path d="M46 63 v-9 q0 -2 2 -2 h8 q2 0 2 2 v9z" fill="' + SKIN + '"/><rect x="48" y="42" width="3.6" height="12" rx="1.8" fill="' + SKIN + '"/><rect x="52.6" y="43" width="3.6" height="11" rx="1.8" fill="' + SKIN + '"/>' + txt(58, 40, 9, "?", "#c25b3f"),
+    book: '<rect x="42" y="46" width="18" height="15" rx="1" fill="#4a7c59"/><path d="M45 46 v15" stroke="#fff" stroke-width="0.8"/>' + txt(52.5, 55.5, 3.6, "BIOLOGY", "#fff", ' transform="rotate(180 52.5 54)"'),
+    pizza: '<path d="M42 44 l20 6 -13 13z" fill="#f2c14e"/><path d="M42 44 l20 6" stroke="#c9873a" stroke-width="2.4"/><circle cx="50" cy="51" r="1.8" fill="#c0392b" stroke="none"/><circle cx="54" cy="55" r="1.6" fill="#c0392b" stroke="none"/>',
+    jeb: '<rect x="38" y="46" width="24" height="13" rx="1.5" fill="#fff"/>' + txt(50, 55.5, 8, "Jeb!", "#c0392b") + '<path d="M50 59 v5" stroke-width="1.6"/>' + txt(10, 16, 7, "…", "#8a8480"),
+    wifi: '<path d="M42 50 q10 -9 20 0 M45 53.5 q7 -6 14 0 M48.5 57 q3.5 -3 7 0" fill="none" stroke-width="1.6"/><circle cx="52" cy="60" r="1.4" fill="' + INK + '"/><path d="M43 44 l18 18 M61 44 l-18 18" stroke="#e04b3b" stroke-width="2.2"/>',
+    baseball: '<circle cx="52" cy="52" r="8" fill="#fff"/><path d="M46 46 q4 6 0 12 M58 46 q-4 6 0 12" stroke="#d0403a" stroke-width="1" fill="none"/>' + txt(10, 15, 8, "NY?", "#2e4f8a")
+  };
+
+  // Props that replace the face entirely.
+  var SOLO = {
+    envelope: '<rect x="8" y="16" width="48" height="32" rx="2" fill="#fff"/><path d="M8 18 L32 36 L56 18" fill="none"/><circle cx="32" cy="38" r="7" fill="#c25b3f"/>' + txt(32, 40.3, 5, "FBI", "#fff") + txt(32, 58, 5.5, "RE: EMAILS (AGAIN)", INK),
+    laptop: '<path d="M14 14 h36 v24 h-36z" fill="#3a3a3a"/><rect x="17" y="17" width="30" height="18" fill="#9fd3ef" stroke="none"/><path d="M8 40 h48 l-4 6 h-40z" fill="#c8c8c8"/><path d="M36 44 l8 8" /><rect x="40" y="50" width="18" height="9" rx="1.5" fill="#f3dfd6" transform="rotate(10 49 54)"/>' + txt(49, 56.5, 4.2, "REPAIR #", "#c25b3f", ' transform="rotate(10 49 54)"'),
+    vhs: '<rect x="6" y="16" width="52" height="32" rx="3" fill="#2b2b2b"/><rect x="14" y="22" width="36" height="12" rx="2" fill="#f7f4ef"/>' + txt(32, 30.5, 5, "10/29/04", "#1a1a1a") + '<circle cx="22" cy="41" r="4" fill="#666"/><circle cx="42" cy="41" r="4" fill="#666"/>',
+    truck: '<rect x="4" y="22" width="36" height="24" rx="2" fill="#4a7c59"/><path d="M40 30 h11 l8 9 v7 h-19z" fill="#e8e3da"/><rect x="43" y="32" width="7" height="6" fill="#9fd3ef" stroke="none"/><circle cx="14" cy="47" r="5" fill="#2b2b2b"/><circle cx="48" cy="47" r="5" fill="#2b2b2b"/><path d="M10 14 q2 -4 0 -8 M20 14 q2 -4 0 -8 M30 14 q2 -4 0 -8" stroke="#8a8480" stroke-width="1.2" fill="none"/>' + txt(22, 37, 6, "TRUMP", "#fff"),
+    hurricane: '<circle cx="32" cy="29" r="22" fill="#cfe3ee" stroke="none"/><g class="spin" style="transform-origin:32px 29px"><path d="M29 29 a3 3 0 0 1 6 0 a6 6 0 0 1 -12 0 a9 9 0 0 1 18 0 a12 12 0 0 1 -24 0 a15 15 0 0 1 30 0 a18 18 0 0 1 -36 0" fill="none" stroke="#3a6fb0" stroke-width="2.6"/></g>' + txt(32, 61, 6, "*HANDSHAKE*", "#c25b3f"),
+    spinner: '<rect x="18" y="6" width="28" height="52" rx="5" fill="#2b2b2b"/><rect x="21" y="12" width="22" height="38" fill="#f7f4ef" stroke="none"/><g class="spin"><path d="M32 24 a8 8 0 1 1 -8 8" fill="none" stroke="#c25b3f" stroke-width="2.6"/></g>' + txt(32, 46, 5, "0% IN", "#1a1a1a")
+  };
+
+  function head(d) {
+    var face = d.face || "round";
+    var rx = { round: 14, oval: 12.5, long: 11.5, square: 13.5 }[face], ry = { round: 15, oval: 16, long: 17.5, square: 16 }[face];
+    var L = 32 - rx, R = 32 + rx, T = 32 - ry, hc = HAIR[d.col] || HAIR.dark;
+    var o = [];
+    var women = d.hair === "bob" || d.hair === "beehive";
+    // shoulders
+    o.push('<path d="M12 64 Q14 51 32 50 Q50 51 52 64z" fill="' + (women ? "#7b5ea7" : SUIT) + '"/>');
+    if (!women) o.push('<path d="M29 50 L32 58 L35 50z" fill="#fff"/><path d="M31.2 51.5 L32 58 L32.8 51.5z" fill="#c25b3f" stroke="none"/>');
+    // hair behind face
+    if (d.hair === "bob") o.push('<path d="M' + (L - 3) + ' 46 C' + (L - 5) + ' ' + (T - 6) + ', ' + (R + 5) + ' ' + (T - 6) + ', ' + (R + 3) + ' 46z" fill="' + hc + '"/>');
+    if (d.hair === "beehive") o.push('<ellipse cx="32" cy="' + (T + 1) + '" rx="' + (rx + 1) + '" ry="11" fill="' + hc + '"/><path d="M' + (L - 1) + ' 30 Q' + (L - 3) + ' 42 ' + (L + 2) + ' 46 M' + (R + 1) + ' 30 Q' + (R + 3) + ' 42 ' + (R - 2) + ' 46" fill="none" stroke="' + hc + '" stroke-width="3"/>');
+    // ears + face
+    o.push('<ellipse cx="' + L + '" cy="33" rx="2.4" ry="3.6" fill="' + SKIN + '"/><ellipse cx="' + R + '" cy="33" rx="2.4" ry="3.6" fill="' + SKIN + '"/>');
+    if (face === "square") o.push('<rect x="' + L + '" y="' + T + '" width="' + (2 * rx) + '" height="' + (2 * ry) + '" rx="9" fill="' + SKIN + '"/>');
+    else o.push('<ellipse cx="32" cy="32" rx="' + rx + '" ry="' + ry + '" fill="' + SKIN + '"/>');
+    // hair on top
+    var top = T - 1;
+    if (d.hair === "short" || d.hair === "slick")
+      o.push('<path d="M' + L + ' 30 C' + L + ' ' + (top - 3) + ', ' + R + ' ' + (top - 3) + ', ' + R + ' 30 C' + (R - 3) + ' ' + (T + 6) + ', ' + (L + 3) + ' ' + (T + 6) + ', ' + L + ' 30z" fill="' + hc + '"/>' +
+        (d.hair === "slick" ? '<path d="M' + (L + 5) + ' ' + (T + 3) + ' Q32 ' + (T - 1) + ' ' + (R - 5) + ' ' + (T + 3) + '" stroke="#fff" stroke-width="0.8" fill="none" opacity="0.7"/>' : ""));
+    if (d.hair === "swoop")
+      o.push('<path d="M' + L + ' 30 C' + L + ' ' + (top - 3) + ', ' + R + ' ' + (top - 3) + ', ' + R + ' 30 C' + (R - 3) + ' ' + (T + 6) + ', ' + (L + 3) + ' ' + (T + 6) + ', ' + L + ' 30z" fill="' + hc + '"/>' +
+        '<path d="M' + (L + 1) + ' ' + (T + 7) + ' Q' + (L + 6) + ' ' + (T - 6) + ' ' + (R + 3) + ' ' + (T + 4) + ' Q' + (32 + 2) + ' ' + (T + 1) + ' ' + (L + 1) + ' ' + (T + 7) + 'z" fill="' + hc + '"/>');
+    if (d.hair === "tall")
+      o.push('<path d="M' + L + ' 30 C' + (L - 1) + ' ' + (top - 12) + ', ' + (R + 1) + ' ' + (top - 12) + ', ' + R + ' 30 C' + (R - 3) + ' ' + (T + 5) + ', ' + (L + 3) + ' ' + (T + 5) + ', ' + L + ' 30z" fill="' + hc + '"/>');
+    if (d.hair === "bald")
+      o.push('<path d="M' + (L + 0.5) + ' 31 q-1 -6 2.5 -9 M' + (R - 0.5) + ' 31 q1 -6 -2.5 -9" stroke="' + hc + '" stroke-width="2.4" fill="none"/><path d="M' + (32 - 4) + ' ' + (T + 4) + ' q3 -2 6 -1" stroke="#fff" stroke-width="1" fill="none"/>');
+    if (women)
+      o.push('<path d="M' + (L + 0.5) + ' ' + (T + 10) + ' Q32 ' + (T - 3) + ' ' + (R - 0.5) + ' ' + (T + 10) + ' Q' + (32 + 4) + ' ' + (T + 5) + ' ' + (L + 0.5) + ' ' + (T + 10) + 'z" fill="' + hc + '"/>');
+    // brows, eyes, nose, glasses
+    var b = d.brows === "up" ? '<path d="M25 25 Q27.5 22.5 30 24.5 M34 24.5 Q36.5 22.5 39 25" fill="none"/>' : '<path d="M25 27.2 L30 26.4 M34 26.4 L39 27.2" fill="none"/>';
+    o.push(b + '<circle cx="27.5" cy="31" r="1.5" fill="' + INK + '" stroke="none"/><circle cx="36.5" cy="31" r="1.5" fill="' + INK + '" stroke="none"/>');
+    o.push('<path d="M32 32 Q30.4 37 32.6 37.4" fill="none" stroke-width="1.2"/>');
+    if (d.glasses === "round") o.push('<circle cx="27.5" cy="31" r="4" fill="none" stroke-width="1.2"/><circle cx="36.5" cy="31" r="4" fill="none" stroke-width="1.2"/><path d="M31.5 31 h1" stroke-width="1.2"/>');
+    if (d.glasses === "aviator") o.push('<path d="M23 28.5 h9 v3 q0 4 -4.5 4 q-4.5 0 -4.5 -4z M32 28.5 h9 v3 q0 4 -4.5 4 q-4.5 0 -4.5 -4z" fill="#3a3a3a" fill-opacity="0.75" stroke-width="1"/>');
+    if (d.stache) o.push('<path d="M26.5 40 Q32 36.8 37.5 40 Q32 39.2 26.5 40z" fill="' + hc + '"/>');
+    // mouth
+    var mouth = {
+      smile: '<path d="M27.5 41 Q32 45.5 36.5 41" fill="none"/>',
+      smirk: '<path d="M28 42.4 Q33 44 37 40.4" fill="none"/>',
+      yell: '<ellipse cx="32" cy="43" rx="4.2" ry="5" fill="#5a1f1f"/><ellipse cx="32" cy="45.6" rx="2.4" ry="1.4" fill="#e07a7a" stroke="none"/>',
+      o: '<ellipse cx="32" cy="42.5" rx="2.2" ry="2.8" fill="#5a1f1f"/>',
+      grimace: '<rect x="27" y="40" width="10" height="4.6" rx="1.6" fill="#fff"/><path d="M27.4 42.3 h9.2 M30.3 40 v4.6 M33.7 40 v4.6" stroke-width="0.7"/>'
+    }[d.mouth || "smile"];
+    o.push(mouth);
+    if (d.mouth === "yell") o.push('<path d="M10 22 l-5 -3 M10 28 h-6 M54 22 l5 -3 M54 28 h6" stroke="#c25b3f" stroke-width="1.4"/>');
+    return o.join("");
+  }
+
+  var doodleCache = {};
+  function doodle(id, size) {
+    var key = id + ":" + size;
+    if (!doodleCache[key]) {
+      var d = FIELD[id].d || {};
+      var body = SOLO[d.prop] ? SOLO[d.prop] : head(d) + (PROPS[d.prop] || "");
+      doodleCache[key] = '<svg class="doodle" viewBox="0 0 64 64" width="' + size + '" height="' + size + '" aria-hidden="true">' +
+        '<g class="sk" stroke="' + INK + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">' + body + '</g></svg>';
+    }
+    return doodleCache[key];
+  }
+  function doodleNode(id, size, cls) {
+    var w = el("span", cls || "");
+    w.innerHTML = doodle(id, size); // static markup built from FIELD only
+    return w.firstChild;
+  }
+
+  // ---------- hover card ----------
+  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var card = document.getElementById("hovercard");
+  var hoverTimer = null;
+
+  function fillDetails(target, id, withHint) {
+    var f = FIELD[id];
+    if (f.q) target.appendChild(el("p", "quote", "“" + f.q.replace(/ — .*$/, "") + "”" + (/ — /.test(f.q) ? " —" + f.q.split(" —")[1] : "")));
+    var fo = el("p", "fallout");
+    fo.appendChild(el("b", "", "The fallout"));
+    fo.appendChild(document.createTextNode(f.f));
+    target.appendChild(fo);
+    if (withHint) target.appendChild(el("p", "hc-hint", "Click to pick · i for Wikipedia"));
+  }
+
+  function metaLine(id) {
+    var f = FIELD[id];
+    return REGIONS[Math.floor(id / 8)] + " · " + (id % 8 + 1) + " seed · " + f.w + " · " + f.y;
+  }
+
+  function showCard(id, anchor) {
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(function () {
+      if (!document.body.contains(anchor)) return;
+      var f = FIELD[id];
+      card.textContent = "";
+      var top = el("div", "hc-top boil");
+      top.appendChild(doodleNode(id, 72));
+      var hd = el("div");
+      hd.appendChild(el("div", "hc-meta", metaLine(id)));
+      hd.appendChild(el("div", "hc-title", f.t));
+      top.appendChild(hd);
+      card.appendChild(top);
+      card.appendChild(el("p", "", f.b));
+      fillDetails(card, id, !shared);
+      var r = anchor.getBoundingClientRect(), cw = 320, gap = 12;
+      var left = r.right + gap;
+      if (left + cw > window.innerWidth - 8) left = r.left - cw - gap;
+      if (left < 8) left = Math.max(8, Math.min(window.innerWidth - cw - 8, r.left));
+      card.style.left = left + "px";
+      card.style.top = "0px";
+      card.classList.add("show");
+      var ch = card.offsetHeight;
+      var t = Math.min(Math.max(8, r.top + r.height / 2 - ch / 2), window.innerHeight - ch - 8);
+      card.style.top = t + "px";
+    }, 200);
+  }
+  function hideCard() {
+    clearTimeout(hoverTimer);
+    card.classList.remove("show");
+  }
+  window.addEventListener("scroll", hideCard, { passive: true });
+  document.querySelector(".bracket-wrap").addEventListener("scroll", hideCard, { passive: true });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideCard(); });
+
+  // ---------- trash talk ----------
+  var bubble = document.getElementById("bubble");
+  var srEl = document.getElementById("sr");
+  var bubbleTimer = null;
+
+  function isMobileLayout() { return window.matchMedia("(max-width: 760px)").matches; }
+
+  function trashTalk(m, slot) {
+    var scope = isMobileLayout() ? roundsEl : bracketEl;
+    var row = scope.querySelector('.team[data-m="' + m + '"][data-slot="' + slot + '"]');
+    var other = scope.querySelector('.team[data-m="' + m + '"][data-slot="' + (1 - slot) + '"]');
+    var id = row && row.getAttribute("data-id");
+    if (!row || id == null) return;
+    var line = FIELD[Number(id)].tt;
+    row.classList.add("stamp");
+    if (other && !other.classList.contains("empty")) other.classList.add("wobble");
+    var r = row.getBoundingClientRect();
+    bubble.textContent = line;
+    bubble.style.left = Math.min(Math.max(r.left + r.width / 2, 90), window.innerWidth - 90) + "px";
+    bubble.style.top = (r.top - 4) + "px";
+    bubble.classList.remove("pop");
+    void bubble.offsetWidth;
+    bubble.classList.add("pop");
+    srEl.textContent = FIELD[Number(id)].t + ": " + line;
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(function () { bubble.classList.remove("pop"); }, 1950);
+  }
+  window.addEventListener("scroll", function () { bubble.classList.remove("pop"); }, { passive: true });
+
+  // ---------- ambience ----------
+  function startAmbience() {
+    if (reduceMotion.matches) return;
+    var amb = document.getElementById("ambience");
+    var colors = ["#c25b3f", "#d98a2b", "#b8432c", "#d8b263", "#8f5a2a"];
+    for (var i = 0; i < 7; i++) {
+      var leaf = el("span", "leaf");
+      leaf.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2 C17 6 21 10 20 15 C19 19 15 21 12 22 C9 21 5 19 4 15 C3 10 7 6 12 2z" fill="' +
+        colors[i % colors.length] + '"/><path d="M12 4 V21 M12 10 L16 7 M12 14 L8 11 M12 17 L16 14" stroke="#00000033" stroke-width="1" fill="none"/></svg>';
+      var edge = i % 2 ? 72 + Math.random() * 26 : Math.random() * 26; // keep mostly to the margins
+      leaf.style.left = edge + "%";
+      leaf.style.animationDuration = (16 + Math.random() * 12) + "s";
+      leaf.style.animationDelay = (-Math.random() * 24) + "s";
+      leaf.style.width = leaf.style.height = (14 + Math.random() * 10) + "px";
+      amb.appendChild(leaf);
+    }
+    var lane = document.getElementById("vanlane");
+    function drive(first) {
+      setTimeout(function () {
+        lane.classList.remove("go");
+        lane.classList.toggle("towing", Math.random() < 0.5);
+        void lane.offsetWidth;
+        lane.classList.add("go");
+        drive(false);
+      }, first ? 5000 : 45000 + Math.random() * 25000);
+    }
+    drive(true);
+  }
+
+  function matchEl(picks, k, i, withDoodle) {
     var m = OFFSET[k] + i, teams = teamsFor(picks, k, i), v = picks[m];
     var box = el("div", "match" + (k === 4 ? " final" : ""));
     teams.forEach(function (id, slot) {
       var row = el("div", "team");
+      row.setAttribute("data-m", String(m));
+      row.setAttribute("data-slot", String(slot));
+      if (id != null) row.setAttribute("data-id", String(id));
       if (id == null) row.classList.add("empty");
       else if (v !== "-") row.classList.add(Number(v) === slot ? "won" : "lost");
 
@@ -535,10 +909,14 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
       } else {
         var f = FIELD[id];
         btn.appendChild(el("span", "seed", String((id % 8) + 1)));
+        if (withDoodle) btn.appendChild(doodleNode(id, 30));
         btn.appendChild(el("span", "name", f.t));
-        btn.title = f.t + " (" + f.w + ", " + f.y + ")";
         if (shared) btn.disabled = true;
-        else btn.addEventListener("click", function () { setPick(k, i, slot); });
+        else btn.addEventListener("click", function () { hideCard(); setPick(k, i, slot); });
+        row.addEventListener("mouseenter", function () { if (canHover.matches) showCard(id, row); });
+        row.addEventListener("mouseleave", hideCard);
+        btn.addEventListener("focus", function () { if (btn.matches(":focus-visible")) showCard(id, row); });
+        btn.addEventListener("blur", hideCard);
         btn.setAttribute("aria-label", "Pick " + f.t + (v !== "-" && Number(v) === slot ? " (picked)" : ""));
       }
       row.appendChild(btn);
@@ -558,7 +936,15 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
   function champEl(picks) {
     var c = champion(picks), box = el("div", "champ");
     box.appendChild(document.createTextNode(c == null ? "Champion: TBD" : "Champion"));
-    if (c != null) box.appendChild(el("strong", "", FIELD[c].t));
+    if (c != null) {
+      var wrap = el("div", "champ-doodle bob boil");
+      wrap.appendChild(doodleNode(c, 96));
+      var crown = el("span");
+      crown.innerHTML = '<svg class="crown" viewBox="0 0 40 20" aria-hidden="true"><path d="M3 18 L5 5 L13 12 L20 2 L27 12 L35 5 L37 18z" fill="#e2b33c" stroke="#8f6a14" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+      wrap.appendChild(crown.firstChild);
+      box.appendChild(wrap);
+      box.appendChild(el("strong", "", FIELD[c].t));
+    }
     return box;
   }
 
@@ -621,16 +1007,16 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
       var per = ROUND_SIZE[k] / 4;
       for (var r = 0; r < 4; r++) {
         roundsEl.appendChild(el("div", "rlabel", REGIONS[r]));
-        for (var j = 0; j < per; j++) roundsEl.appendChild(matchEl(picks, k, r * per + j));
+        for (var j = 0; j < per; j++) roundsEl.appendChild(matchEl(picks, k, r * per + j, true));
       }
     } else if (k === 3) {
       roundsEl.appendChild(el("div", "rlabel", REGIONS[0] + " v " + REGIONS[1]));
-      roundsEl.appendChild(matchEl(picks, 3, 0));
+      roundsEl.appendChild(matchEl(picks, 3, 0, true));
       roundsEl.appendChild(el("div", "rlabel", REGIONS[2] + " v " + REGIONS[3]));
-      roundsEl.appendChild(matchEl(picks, 3, 1));
+      roundsEl.appendChild(matchEl(picks, 3, 1, true));
     } else {
       roundsEl.appendChild(el("div", "rlabel", "Championship"));
-      roundsEl.appendChild(matchEl(picks, 4, 0));
+      roundsEl.appendChild(matchEl(picks, 4, 0, true));
       roundsEl.appendChild(champEl(picks));
     }
     if (k < 4) {
@@ -679,6 +1065,12 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
       REGIONS[Math.floor(id / 8)] + " · " + (id % 8 + 1) + " seed · " + f.w + " · " + f.y;
     document.getElementById("infoTitle").textContent = f.t;
     document.getElementById("infoBlurb").textContent = f.b;
+    var dd = document.getElementById("infoDoodle");
+    dd.textContent = "";
+    dd.appendChild(doodleNode(id, 84));
+    var ex = document.getElementById("infoExtra");
+    ex.textContent = "";
+    fillDetails(ex, id, false);
     document.getElementById("infoWiki").href =
       "https://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=" + encodeURIComponent(f.wk);
     openDialog(infoDialog);
@@ -779,6 +1171,7 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
   });
 
   // ---------- boot ----------
+  startAmbience();
   loadOwn();
   shared = parseHash();
   if (location.hash && !shared) history.replaceState(null, "", location.pathname + location.search);
