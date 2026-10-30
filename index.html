@@ -88,6 +88,7 @@ h1 span { color: var(--accent); }
   cursor: pointer;
 }
 .btn:hover:not(:disabled) { border-color: var(--text); }
+a.btn { text-decoration: none; display: inline-block; color: var(--text); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.primary:hover:not(:disabled) { filter: brightness(1.08); border-color: var(--accent); }
@@ -343,7 +344,10 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
   <p class="meta" id="infoMeta"></p>
   <h2 id="infoTitle"></h2>
   <p id="infoBlurb"></p>
-  <div class="row"><button class="btn" type="button" data-close>Close</button></div>
+  <div class="row">
+    <a class="btn" id="infoWiki" target="_blank" rel="noopener">Wikipedia ↗</a>
+    <button class="btn" type="button" data-close>Close</button>
+  </div>
 </dialog>
 
 <dialog id="shareDialog">
@@ -372,41 +376,41 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
   var REGIONS = ["Gaffes", "Scandals", "October Surprises", "Implosions"];
   var FIELD = [
     // Gaffes
-    { t: "The Dean Scream", w: "Howard Dean", y: "2004", b: "Iowa caucus night: a ballroom, a hoarse governor, and a mic that picked up exactly one voice. He was the frontrunner going in and a punchline by breakfast." },
-    { t: "“47 percent”", w: "Mitt Romney", y: "2012", b: "Told Boca Raton donors that 47% of Americans would vote for the president “no matter what” and see themselves as victims. The bartender was recording, and Mother Jones had it by September." },
-    { t: "“Basket of deplorables”", w: "Hillary Clinton", y: "2016", b: "Put “half” of Trump’s supporters in it at a New York fundraiser. They had it on T-shirts within the week." },
-    { t: "“Mission Accomplished”", w: "George W. Bush", y: "2003", b: "A flight suit, an aircraft carrier, and a banner. The Iraq War went on for more than eight years after that." },
-    { t: "“All of ’em, any of ’em”", w: "Sarah Palin", y: "2008", b: "Katie Couric asked which newspapers she read. Tina Fey barely had to change the words." },
-    { t: "“Binders full of women”", w: "Mitt Romney", y: "2012", b: "Second debate, a point about hiring women in Massachusetts. The Tumblr went up before the debate was over." },
-    { t: "“Voted for it before I voted against it”", w: "John Kerry", y: "2004", b: "About the $87 billion for Iraq. Ten words that wrote the Bush campaign’s flip-flop ads for it." },
-    { t: "“Cling to guns or religion”", w: "Barack Obama", y: "2008", b: "Told a closed-door San Francisco fundraiser that “bitter” small-town voters cling to guns or religion. It did not stay closed-door." },
+    { t: "The Dean Scream", w: "Howard Dean", y: "2004", b: "Iowa caucus night: a ballroom, a hoarse governor, and a mic that picked up exactly one voice. He was the frontrunner going in and a punchline by breakfast.", wk: "Dean scream" },
+    { t: "“47 percent”", w: "Mitt Romney", y: "2012", b: "Told Boca Raton donors that 47% of Americans would vote for the president “no matter what” and see themselves as victims. The bartender was recording, and Mother Jones had it by September.", wk: "Mitt Romney 47 percent remark" },
+    { t: "“Basket of deplorables”", w: "Hillary Clinton", y: "2016", b: "Put “half” of Trump’s supporters in it at a New York fundraiser. They had it on T-shirts within the week.", wk: "Basket of deplorables" },
+    { t: "“Mission Accomplished”", w: "George W. Bush", y: "2003", b: "A flight suit, an aircraft carrier, and a banner. The Iraq War went on for more than eight years after that.", wk: "Mission Accomplished speech" },
+    { t: "“All of ’em, any of ’em”", w: "Sarah Palin", y: "2008", b: "Katie Couric asked which newspapers she read. Tina Fey barely had to change the words.", wk: "Sarah Palin Katie Couric interview" },
+    { t: "“Binders full of women”", w: "Mitt Romney", y: "2012", b: "Second debate, a point about hiring women in Massachusetts. The Tumblr went up before the debate was over.", wk: "John Kerry 2004 presidential campaign" },
+    { t: "“Voted for it before I voted against it”", w: "John Kerry", y: "2004", b: "About the $87 billion for Iraq. Ten words that wrote the Bush campaign’s flip-flop ads for it.", wk: "Barack Obama 2008 presidential campaign" },
+    { t: "“Cling to guns or religion”", w: "Barack Obama", y: "2008", b: "Told a closed-door San Francisco fundraiser that “bitter” small-town voters cling to guns or religion. It did not stay closed-door.", wk: "Binders full of women" },
     // Scandals
-    { t: "The Weiner tweet", w: "Anthony Weiner", y: "2011", b: "Tweeted a photo he meant to DM, then claimed he’d been hacked. He resigned, came back as “Carlos Danger” in 2013, and his laptop has a cameo elsewhere in this bracket." },
-    { t: "“Hiking the Appalachian Trail”", w: "Mark Sanford", y: "2009", b: "South Carolina’s governor vanished for six days while staff said he was hiking. He was in Buenos Aires. Four years later he was back in Congress." },
-    { t: "Everything about George Santos", w: "George Santos", y: "2022", b: "Baruch, Goldman, Citigroup, star volleyball player: almost none of it was true. He became only the sixth member ever expelled from the House." },
-    { t: "Client 9", w: "Eliot Spitzer", y: "2008", b: "The governor who made his name busting prostitution rings turned out to be a client of one. He resigned within the week." },
-    { t: "“A wide stance”", w: "Larry Craig", y: "2007", b: "Arrested in a Minneapolis airport bathroom stall, pleaded guilty, then explained he just had a wide stance." },
-    { t: "The gold bars", w: "Bob Menendez", y: "2024", b: "The FBI found gold bars and about $480,000 in cash, some of it stuffed into his own jackets. He was convicted on all 16 counts." },
-    { t: "The Rielle Hunter affair", w: "John Edwards", y: "2008", b: "Denied an affair with his campaign videographer while his wife was fighting cancer, then denied the baby. Eventually he admitted both." },
-    { t: "Bridgegate", w: "Chris Christie", y: "2013", b: "“Time for some traffic problems in Fort Lee.” Lanes onto the George Washington Bridge closed for four days, apparently to punish a mayor." },
+    { t: "The Weiner tweet", w: "Anthony Weiner", y: "2011", b: "Tweeted a photo he meant to DM, then claimed he’d been hacked. He resigned, came back as “Carlos Danger” in 2013, and his laptop has a cameo elsewhere in this bracket.", wk: "Anthony Weiner sexting scandals" },
+    { t: "“Hiking the Appalachian Trail”", w: "Mark Sanford", y: "2009", b: "South Carolina’s governor vanished for six days while staff said he was hiking. He was in Buenos Aires. Four years later he was back in Congress.", wk: "Mark Sanford" },
+    { t: "Everything about George Santos", w: "George Santos", y: "2022", b: "Baruch, Goldman, Citigroup, star volleyball player: almost none of it was true. He became only the sixth member ever expelled from the House.", wk: "George Santos" },
+    { t: "Client 9", w: "Eliot Spitzer", y: "2008", b: "The governor who made his name busting prostitution rings turned out to be a client of one. He resigned within the week.", wk: "Eliot Spitzer prostitution scandal" },
+    { t: "“A wide stance”", w: "Larry Craig", y: "2007", b: "Arrested in a Minneapolis airport bathroom stall, pleaded guilty, then explained he just had a wide stance.", wk: "Larry Craig scandal" },
+    { t: "The gold bars", w: "Bob Menendez", y: "2024", b: "The FBI found gold bars and about $480,000 in cash, some of it stuffed into his own jackets. He was convicted on all 16 counts.", wk: "Bob Menendez" },
+    { t: "The Rielle Hunter affair", w: "John Edwards", y: "2008", b: "Denied an affair with his campaign videographer while his wife was fighting cancer, then denied the baby. Eventually he admitted both.", wk: "John Edwards extramarital affair" },
+    { t: "Bridgegate", w: "Chris Christie", y: "2013", b: "“Time for some traffic problems in Fort Lee.” Lanes onto the George Washington Bridge closed for four days, apparently to punish a mayor.", wk: "Fort Lee lane closure scandal" },
     // October Surprises
-    { t: "The Access Hollywood tape", w: "Donald Trump", y: "Oct 2016", b: "Came out on a Friday afternoon, and every pundit called it the end of the campaign. He won a month later." },
-    { t: "The Comey letter", w: "James Comey", y: "Oct 2016", b: "Eleven days out, the FBI director told Congress there were new Clinton emails. They turned up on Anthony Weiner’s laptop, and nothing came of them except possibly the election." },
-    { t: "Hunter Biden’s laptop", w: "Hunter Biden", y: "Oct 2020", b: "Left at a Delaware repair shop, then landed in the New York Post. Twitter’s decision to block the link became its own scandal about the first one." },
-    { t: "The bin Laden tape", w: "Osama bin Laden", y: "Oct 2004", b: "A new video from the man himself, four days before the election. Suddenly the race was about 9/11 again." },
-    { t: "The Foley messages", w: "Mark Foley", y: "Oct 2006", b: "The co-chair of the House caucus on missing and exploited children resigned over explicit messages to teenage House pages. Republicans lost the House five weeks later." },
-    { t: "“Floating island of garbage”", w: "MSG rally", y: "Oct 2024", b: "A warm-up comic’s line about Puerto Rico. Biden answered with a “garbage” line of his own, then Trump showed up in a garbage truck. Nobody won this one except the truck." },
-    { t: "The DUI", w: "George W. Bush", y: "Nov 2000", b: "Five days out, a 1976 drunk-driving arrest in Maine surfaced. Strictly speaking it was a November surprise, and the committee allowed it." },
-    { t: "Sandy and the “hug”", w: "Chris Christie", y: "Oct 2012", b: "A week before the election, Christie toured the storm damage with Obama and had nice things to say about him. It was a handshake, but some Republicans still haven’t forgiven the hug." },
+    { t: "The Access Hollywood tape", w: "Donald Trump", y: "Oct 2016", b: "Came out on a Friday afternoon, and every pundit called it the end of the campaign. He won a month later.", wk: "Donald Trump Access Hollywood tape" },
+    { t: "The Comey letter", w: "James Comey", y: "Oct 2016", b: "Eleven days out, the FBI director told Congress there were new Clinton emails. They turned up on Anthony Weiner’s laptop, and nothing came of them except possibly the election.", wk: "Comey letter" },
+    { t: "Hunter Biden’s laptop", w: "Hunter Biden", y: "Oct 2020", b: "Left at a Delaware repair shop, then landed in the New York Post. Twitter’s decision to block the link became its own scandal about the first one.", wk: "Hunter Biden laptop controversy" },
+    { t: "The bin Laden tape", w: "Osama bin Laden", y: "Oct 2004", b: "A new video from the man himself, four days before the election. Suddenly the race was about 9/11 again.", wk: "2004 Osama bin Laden video" },
+    { t: "The Foley messages", w: "Mark Foley", y: "Oct 2006", b: "The co-chair of the House caucus on missing and exploited children resigned over explicit messages to teenage House pages. Republicans lost the House five weeks later.", wk: "Mark Foley scandal" },
+    { t: "“Floating island of garbage”", w: "MSG rally", y: "Oct 2024", b: "A warm-up comic’s line about Puerto Rico. Biden answered with a “garbage” line of his own, then Trump showed up in a garbage truck. Nobody won this one except the truck.", wk: "2024 Donald Trump rally at Madison Square Garden" },
+    { t: "The DUI", w: "George W. Bush", y: "Nov 2000", b: "Five days out, a 1976 drunk-driving arrest in Maine surfaced. Strictly speaking it was a November surprise, and the committee allowed it.", wk: "George W. Bush 1976 DUI arrest" },
+    { t: "Sandy and the “hug”", w: "Chris Christie", y: "Oct 2012", b: "A week before the election, Christie toured the storm damage with Obama and had nice things to say about him. It was a handshake, but some Republicans still haven’t forgiven the hug.", wk: "Hurricane Sandy" },
     // Implosions
-    { t: "The debate", w: "Joe Biden", y: "2024", b: "Ninety minutes in Atlanta, including “We finally beat Medicare.” He was out of the race 24 days later." },
-    { t: "“Oops”", w: "Rick Perry", y: "2011", b: "Promised to eliminate three federal agencies and could only name two. The third was Energy, which he later ran as Secretary of Energy." },
-    { t: "“Legitimate rape”", w: "Todd Akin", y: "2012", b: "Said the female body can “shut that whole thing down.” That turned a safe Missouri Senate pickup into a 15-point loss." },
-    { t: "9-9-9, then nothing", w: "Herman Cain", y: "2011", b: "He was leading national polls in October. By December the campaign was over, after harassment allegations and a very long pause on Libya." },
-    { t: "“Please clap”", w: "Jeb Bush", y: "2016", b: "A $100 million super PAC, the most famous last name in Republican politics, and a New Hampshire crowd that had to be asked." },
-    { t: "The Iowa caucus app", w: "Iowa Democrats", y: "2020", b: "A new app was supposed to report the results. Days passed before there were results, and Iowa eventually lost its first-in-the-nation slot." },
-    { t: "The Twitter Spaces launch", w: "Ron DeSantis", y: "2023", b: "Announced his campaign on a Twitter audio stream with Elon Musk, which fell over for about 20 minutes. It went roughly like that from there." },
-    { t: "“Another Yankee fan”", w: "Martha Coakley", y: "2010", b: "The heavy favorite for Ted Kennedy’s Senate seat called Curt Schilling a Yankees fan, then lost the seat to Scott Brown. In Massachusetts." }
+    { t: "The debate", w: "Joe Biden", y: "2024", b: "Ninety minutes in Atlanta, including “We finally beat Medicare.” He was out of the race 24 days later.", wk: "2024 Joe Biden–Donald Trump presidential debate" },
+    { t: "“Oops”", w: "Rick Perry", y: "2011", b: "Promised to eliminate three federal agencies and could only name two. The third was Energy, which he later ran as Secretary of Energy.", wk: "Rick Perry 2012 presidential campaign" },
+    { t: "“Legitimate rape”", w: "Todd Akin", y: "2012", b: "Said the female body can “shut that whole thing down.” That turned a safe Missouri Senate pickup into a 15-point loss.", wk: "Todd Akin rape and pregnancy comments" },
+    { t: "9-9-9, then nothing", w: "Herman Cain", y: "2011", b: "He was leading national polls in October. By December the campaign was over, after harassment allegations and a very long pause on Libya.", wk: "Herman Cain 2012 presidential campaign" },
+    { t: "“Please clap”", w: "Jeb Bush", y: "2016", b: "A $100 million super PAC, the most famous last name in Republican politics, and a New Hampshire crowd that had to be asked.", wk: "Jeb Bush 2016 presidential campaign" },
+    { t: "The Iowa caucus app", w: "Iowa Democrats", y: "2020", b: "A new app was supposed to report the results. Days passed before there were results, and Iowa eventually lost its first-in-the-nation slot.", wk: "2020 Iowa Democratic presidential caucuses" },
+    { t: "The Twitter Spaces launch", w: "Ron DeSantis", y: "2023", b: "Announced his campaign on a Twitter audio stream with Elon Musk, which fell over for about 20 minutes. It went roughly like that from there.", wk: "Ron DeSantis 2024 presidential campaign" },
+    { t: "“Another Yankee fan”", w: "Martha Coakley", y: "2010", b: "The heavy favorite for Ted Kennedy’s Senate seat called Curt Schilling a Yankees fan, then lost the seat to Scott Brown. In Massachusetts.", wk: "2010 United States Senate special election in Massachusetts" }
   ];
 
   var ROUND_NAMES = ["Round of 32", "Sweet 16", "Elite 8", "Final Four", "Championship"];
@@ -675,6 +679,8 @@ dialog input[readonly] { font-family: var(--mono); font-size: 12px; }
       REGIONS[Math.floor(id / 8)] + " · " + (id % 8 + 1) + " seed · " + f.w + " · " + f.y;
     document.getElementById("infoTitle").textContent = f.t;
     document.getElementById("infoBlurb").textContent = f.b;
+    document.getElementById("infoWiki").href =
+      "https://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=" + encodeURIComponent(f.wk);
     openDialog(infoDialog);
   }
 
