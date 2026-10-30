@@ -17,3 +17,5 @@ The entries are the `FIELD` array near the top of the script in `index.html`: ei
 Netlify builds from `main`, publishing the repo root (see `netlify.toml`). DNS: `october` is a CNAME on Cloudflare (DNS only) pointing at the Netlify site.
 
 Fonts (Lora, Martian Mono) are borrowed from stuckhe.re.
+
+Changes are listed in `CHANGELOG.md` and in the "Readme & changelog" dialog linked from the page footer.

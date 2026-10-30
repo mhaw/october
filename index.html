@@ -279,6 +279,14 @@ footer {
   font-style: italic;
 }
 footer a { color: inherit; }
+.linkish { border: 0; background: none; padding: 0; font: inherit; font-style: italic; color: inherit; text-decoration: underline; cursor: pointer; }
+.linkish:hover { color: var(--accent); }
+#aboutDialog { width: min(560px, calc(100vw - 32px)); max-height: min(80vh, 720px); }
+#aboutDialog h3 { font-family: var(--mono); font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin: 18px 0 6px; }
+#aboutDialog ul { margin: 0 0 10px; padding-left: 18px; }
+#aboutDialog li { margin-bottom: 4px; font-size: 14px; }
+#aboutDialog p { font-size: 14px; }
+#aboutDialog time { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
 /* ---------- dialogs ---------- */
 dialog {
@@ -451,8 +459,38 @@ header.top { padding-top: 40px; }
 <div class="rounds" id="rounds"></div>
 
 <footer>
-  Ties go to whoever got more cable airtime. A <a href="https://stuckhe.re">stuckhe.re</a> production.
+  Ties go to whoever got more cable airtime. A stingray dude production. &middot;
+  <button class="linkish" type="button" id="aboutBtn">Readme &amp; changelog</button>
 </footer>
+
+<dialog id="aboutDialog" aria-labelledby="aboutTitle">
+  <h2 id="aboutTitle" tabindex="-1" autofocus>Readme</h2>
+  <p>Thirty-two American political gaffes, scandals and October surprises since 2000, seeded into four regions. Pick a winner in every matchup until one disaster is left standing.</p>
+  <h3>How to play</h3>
+  <ul>
+    <li>Click or tap an entry to advance it. Changing an earlier pick clears any later picks that depended on it.</li>
+    <li>Hover an entry, or tap its <b>i</b> button, for the backstory, a quote and the fallout.</li>
+    <li><b>Save &amp; share</b> makes a link that carries your picks. Whoever opens it sees your bracket read-only and can start their own.</li>
+  </ul>
+  <h3>Privacy</h3>
+  <p>Your picks are saved only in this browser. There are no accounts, no analytics and no server, and a shared link holds everything in the link itself.</p>
+  <h3>Accessibility</h3>
+  <ul>
+    <li>Everything works from the keyboard: <kbd>Tab</kbd> moves through entries, <kbd>Enter</kbd> picks, focusing an entry shows its card, and <kbd>Esc</kbd> closes cards and dialogs.</li>
+    <li>Pick reactions are announced to screen readers, and the doodles are decorative and hidden from them.</li>
+    <li>If your device is set to reduce motion, the leaves, the news van and all wobbles are turned off.</li>
+    <li>It follows your system's light or dark setting.</li>
+  </ul>
+  <h3>Changelog</h3>
+  <ul>
+    <li><time datetime="2026-10-30">Oct 30, 2026</time>: new tagline, plus this readme and changelog.</li>
+    <li><time datetime="2026-10-30">Oct 30, 2026</time>: doodles for every entry, hover cards with quotes and fallout, trash talk on every pick, falling leaves and a news van.</li>
+    <li><time datetime="2026-10-30">Oct 30, 2026</time>: Wikipedia links on every entry.</li>
+    <li><time datetime="2026-10-30">Oct 30, 2026</time>: launch with 32 entries, four regions, picks saved in your browser and shareable bracket links.</li>
+  </ul>
+  <p><i>Blurbs are written with a straight face and a raised eyebrow. Spot an error? Tell the stingray dude.</i></p>
+  <div class="row"><button class="btn" type="button" data-close>Close</button></div>
+</dialog>
 
 <dialog id="infoDialog">
   <p class="meta" id="infoMeta"></p>
@@ -1142,6 +1180,10 @@ header.top { padding-top: 40px; }
   });
 
   // ---------- top-level actions ----------
+  document.getElementById("aboutBtn").addEventListener("click", function () {
+    openDialog(document.getElementById("aboutDialog"));
+  });
+
   document.getElementById("resetBtn").addEventListener("click", function () {
     if (pickedCount(own) && !confirm("Clear every pick?")) return;
     own = blank();
